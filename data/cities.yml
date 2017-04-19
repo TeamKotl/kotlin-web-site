@@ -1,4 +1,116 @@
 - geo:
+    lat: 52.09073739999999
+    lng: 5.1214201
+  name: Utrecht, Netherlands
+- geo:
+    lat: 19.0759837
+    lng: 72.8776559
+  name: Bombay,India
+- geo:
+    lat: 52.082869
+    lng: 0.18269
+  name: Hinxton, United Kingdom
+- geo:
+    lat: 18.5204303
+    lng: 73.8567437
+  name: Pune, India
+- geo:
+    lat: 45.5549624
+    lng: 18.6955144
+  name: Osijek, Croatia
+- geo:
+    lat: 60.16985569999999
+    lng: 24.938379
+  name: Helsinki, Finland
+- geo:
+    lat: 45.0811661
+    lng: 13.6387067
+  name: Rovinj, Croatia
+- geo:
+    lat: 28.4594965
+    lng: 77.0266383
+  name: Gurgaon, India
+- geo:
+    lat: 49.61162100000001
+    lng: 6.1319346
+  name: Luxembourg, Luxembourg
+- geo:
+    lat: 1.352083
+    lng: 103.819836
+  name: Singapore, Singapore
+- geo:
+    lat: 53.12348040000001
+    lng: 18.0084378
+  name: Bydgoszcz, Poland
+- geo:
+    lat: 46.9479739
+    lng: 7.4474468
+  name: Bern,Switzerland
+- geo:
+    lat: -8.0475622
+    lng: -34.8769643
+  name: Recife, Brazil
+- geo:
+    lat: 43.16103
+    lng: -77.6109219
+  name: Rochester, NY
+- geo:
+    lat: -36.8484597
+    lng: 174.7633315
+  name: Auckland, New Zealand
+- geo:
+    lat: -27.5953778
+    lng: -48.5480499
+  name: Florianópolis, Brazil
+- geo:
+    lat: -27.4697707
+    lng: 153.0251235
+  name: Brisbane, Australia
+- geo:
+    lat: 50.0411867
+    lng: 21.9991196
+  name: Rzeszów, Poland
+- geo:
+    lat: 36.8507689
+    lng: -76.28587259999999
+  name: Norfolk, United States
+- geo:
+    lat: 53.8007554
+    lng: -1.5490774
+  name: Leeds, United Kingdom
+- geo:
+    lat: 48.464717
+    lng: 35.046183
+  name: Dnipro, Ukraine
+- geo:
+    lat: 61.77816170000001
+    lng: 34.3640396
+  name: Petrozavodsk, Russia
+- geo:
+    lat: 46.7712101
+    lng: 23.6236353
+  name: Cluj Napoca, Romania
+- geo:
+    lat: 7.490462
+    lng: 4.5521274
+  name: Ile Ife, Nigeria
+- geo:
+    lat: 54.8985207
+    lng: 23.9035965
+  name: Kaunas, Lithuania
+- geo:
+    lat: 32.321458
+    lng: 34.853196
+  name: Netanya, Israel
+- geo:
+    lat: 55.728449
+    lng: 9.112366000000002
+  name: Billund, Denmark
+- geo:
+    lat: 49.2827291
+    lng: -123.1207375
+  name: Vancouver, Canada
+- geo:
     lat: 44.840798
     lng: -93.2982799
   name: Bloomington, MN
