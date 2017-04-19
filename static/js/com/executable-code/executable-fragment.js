@@ -60,6 +60,9 @@ class ExecutableFragment extends ExecutableCodeTemplate {
       sample = state.code.substring(state.code.indexOf('//sampleStart') + '//sampleStart'.length + 1,
         state.code.indexOf('//sampleEnd') - 1);
       this.suffix = state.code.substring(state.code.indexOf('//sampleEnd') + '//sampleEnd'.length);
+      if(this.suffix.endsWith('\n')) {
+        this.suffix = this.suffix.substr(0, this.suffix.length - 1)
+      }
     } else {
       if (this.state.folded) {
         sample = this.codemirror.getValue();
@@ -91,16 +94,28 @@ class ExecutableFragment extends ExecutableCodeTemplate {
       this.codemirror.markText(
         {line: 0, ch: 0},
         {line: countLines(this.prefix), ch: 0},
-        {readOnly: true}
+        {
+          readOnly: true,
+          inclusiveLeft: true,
+          inclusiveRight: false
+        }
       );
       this.codemirror.markText(
         {line: this.codemirror.lineCount() - countLines(this.suffix) - 1, ch: null},
         {line: this.codemirror.lineCount() - 1, ch: null},
-        {readOnly: true}
+        {
+          readOnly: true,
+          inclusiveLeft: false,
+          inclusiveRight: true
+        }
       );
 
-      for (let i = countLines(this.prefix); i < this.codemirror.lineCount() - countLines(this.suffix); i++) {
-        this.codemirror.addLineClass(i, "background", 'sample-line')
+      for (let i = 0; i < countLines(this.prefix); i++) {
+        this.codemirror.addLineClass(i, "background", 'unmodifiable-line')
+      }
+
+      for (let i = this.codemirror.lineCount() - countLines(this.suffix); i < this.codemirror.lineCount(); i++) {
+        this.codemirror.addLineClass(i, "background", 'unmodifiable-line')
       }
     }
 

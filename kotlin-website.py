@@ -3,20 +3,24 @@ import json
 import os
 import sys
 from os import path
+from urlparse import urlparse, urljoin
 
 import xmltodict
 import yaml
+from bs4 import BeautifulSoup
 from flask import Flask, render_template, Response, send_from_directory
-from flask.helpers import url_for, send_file
+from flask.helpers import url_for, send_file, make_response
+from flask.helpers import url_for, send_file, make_response
 from flask_frozen import Freezer, walk_directory
 
 from src.Feature import Feature
-from src.MyFlatPages import MyFlatPages
 from src.Navigaton import Nav
 from src.encoder import DateAwareEncoder
 from src.grammar import get_grammar
 from src.markdown.makrdown import jinja_aware_markdown
+from src.pages.MyFlatPages import MyFlatPages
 from src.pdf import generate_pdf
+from src.processors.processors import process_code_blocks, process_header_ids
 from src.sitemap import generate_sitemap
 
 app = Flask(__name__, static_folder='_assets')
@@ -26,6 +30,9 @@ app.jinja_env.lstrip_blocks = True
 pages = MyFlatPages(app)
 freezer = Freezer(app)
 ignore_stdlib = "--ignore-stdlib" in sys.argv
+build_mode = False
+build_errors = []
+url_adapter = app.create_url_adapter(None)
 
 root_folder = path.join(os.path.dirname(__file__))
 data_folder = path.join(os.path.dirname(__file__), "data")
@@ -192,6 +199,30 @@ def process_page(page_path):
     template = page.meta["layout"] if 'layout' in page.meta else 'default.html'
     if not template.endswith(".html"):
         template += ".html"
+    if build_mode:
+        for link in page.parsed_html.select('a'):
+            if 'href' not in link.attrs:
+                continue
+
+            href = urlparse(urljoin('/' + page_path, link['href']))
+            if href.scheme != '':
+                continue
+            endpoint, params = url_adapter.match(href.path, 'GET', query_args={})
+            if endpoint != 'page' and endpoint != 'get_index_page':
+                response = app.test_client().get(href.path)
+                if response.status_code == 404:
+                    build_errors.append("Broken link: " + str(href.path) + " on page " + page_path)
+                continue
+
+            referenced_page = pages.get(params['page_path'])
+            if referenced_page is None:
+                build_errors.append("Broken link: " + str(href.path) + " on page " + page_path)
+            if href.fragment == '':
+                continue
+
+            ids = map(lambda x: x['id'], referenced_page.parsed_html.select('h1,h2,h3,h4'))
+            if href.fragment not in ids:
+                build_errors.append("Bad anchor: " + str(href.fragment) + " on page " + page_path)
     return render_template(
         template,
         page=page,
@@ -214,14 +245,43 @@ def events_redirect():
 @freezer.register_generator
 def page():
     for page in pages:
-        if ignore_stdlib and page.path.startswith("api"):
-            continue
         yield {'page_path': page.path}
 
 
 @app.route('/<path:page_path>.html')
 def page(page_path):
     return process_page(page_path)
+
+
+@freezer.register_generator
+def api_page():
+    api_folder = path.join(root_folder, 'api')
+    for root, dirs, files in os.walk(api_folder):
+        for file in files:
+            yield {'page_path': path.join(path.relpath(root, api_folder), file).replace(os.sep, '/')}
+
+
+@app.route('/api/<path:page_path>')
+def api_page(page_path):
+    if page_path.endswith('.html'):
+        return process_api_page(page_path)
+    elif not page_path.endswith('/'):
+        page_path += '/'
+    return process_api_page(page_path + 'index.html')
+
+
+def process_api_page(page_path):
+    file_path = path.join(root_folder, 'api', page_path)
+    if not path.exists(file_path):
+        return make_response("Api page " + page_path + " not found", 404)
+    with open(file_path) as html_file:
+        html_content = BeautifulSoup(html_file.read(), 'html.parser')
+        html_content = process_code_blocks(html_content)
+        html_content = process_header_ids(html_content)
+        return render_template(
+            'api.html',
+            page_content=html_content
+        )
 
 
 @app.route('/assets/<path:path>')
@@ -256,10 +316,24 @@ def get_index_page(page_path):
     return process_page(page_path + 'index')
 
 
+@app.after_request
+def add_header(request):
+    request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    request.headers["Pragma"] = "no-cache"
+    request.headers["Expires"] = "0"
+    request.headers['Cache-Control'] = 'public, max-age=0'
+    return request
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == "build":
+        build_mode = True
         urls = freezer.freeze()
         if not ignore_stdlib:
             generate_sitemap(urls)
+        if len(build_errors) > 0:
+            for error in build_errors:
+                sys.stderr.write(error + '\n')
+            sys.exit(-1)
     else:
         app.run(host="0.0.0.0", debug=True, threaded=True)

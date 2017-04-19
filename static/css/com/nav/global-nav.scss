@@ -11,6 +11,7 @@
     float: right;
     font-size: 0;
     margin-top: 2px;
+    padding-right: 176px;
 
     .nav-links {
         .nav-item {
@@ -40,6 +41,11 @@
         left: 0;
         font-size: $base-font-size;
         white-space: nowrap;
+        transition: all 0.4s;
+
+        &.hidden {
+          display: none;
+        }
 
         @media (max-width: 1205px) {
             left: auto;
