@@ -331,11 +331,9 @@ class C() : A(), B {
 
 ## 추상 클래스  ( Abstract Classes )
 
-A class and some of its members may be declared *abstract*{: .keyword }.
-An abstract member does not have an implementation in its class.
-Note that we do not need to annotate an abstract class or function with open – it goes without saying.
+class와 그 멤버는 *abstract*{: .keyword } 선언을 할 수 있습니다. *abstract*{: .keyword } 멤버는 클래스에 implemenration을 가질 수 없습니다. 여러분은  추상 클래스 또는 함수에 open 주석을 달 필요가 없습니다. - 말할 것도 없는 설명이죠.
 
-We can override a non-abstract open member with an abstract one
+우리는 non-abstract 멤버를 abstract멤버로 다시 override (재정의) 할 수 있습니다.
 
 ``` kotlin
 open class Base {
@@ -349,12 +347,11 @@ abstract class Derived : Base() {
 
 ## Companion Objects -  kotlin에서 클래스 내부 접근위한 Static 지정.?
 
-In Kotlin, unlike Java or C#, classes do not have static methods. In most cases, it's recommended to simply use
-package-level functions instead.
+kotlin은  java와 C# 과는 다르게, class에는 static 메서드가 없습니다. 대부분의 경우, 패키지 레벨 기능 대신 단순히 사용하는것을 추천합니다. 
 
-If you need to write a function that can be called without having a class instance but needs access to the internals
-of a class (for example, a factory method), you can write it as a member of an [object declaration](object-declarations.html)
-inside that class.
+클래스 인스턴스가 없어도 호출 할 수있지만 내부에 대한 access가(접근이) 필요한 함수를 작성해야 하는 클래스의 경우에는( 예를들어 , factory 메서드같은 ) 클래스 내부의 멤버로 작성할 수 있습니다.
+
+클래스 인스턴스가 없어도 호출 될 수 있지만 내부에 대한 액세스가 필요한 함수를 작성해야하는 경우 클래스의 경우 클래스 내부에 멤버로 작성할 수 있습니다. -  [object declaration](object-declarations.html) 
 
 Even more specifically, if you declare a [companion object](object-declarations.html#companion-objects) inside your class,
 you'll be able to call its members with the same syntax as calling static methods in Java/C#, using only the class name
