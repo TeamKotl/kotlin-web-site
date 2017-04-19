@@ -351,7 +351,11 @@ kotlin은  java와 C# 과는 다르게, class에는 static 메서드가 없습�
 
 클래스 인스턴스가 없어도 호출 할 수있지만 내부에 대한 access가(접근이) 필요한 함수를 작성해야 하는 클래스의 경우에는( 예를들어 , factory 메서드같은 ) 클래스 내부의 멤버로 작성할 수 있습니다.
 
-클래스 인스턴스가 없어도 호출 될 수 있지만 내부에 대한 액세스가 필요한 함수를 작성해야하는 경우 클래스의 경우 클래스 내부에 멤버로 작성할 수 있습니다. -  [object declaration](object-declarations.html) 
+클래스 인스턴스가 없어도 호출 될 수 있지만 내부에 대한 액세스가 필요한 함수를 작성해야하는 경우 클래스의 경우 클래스 내부에 멤버로 작성할 수 있습니다. -  [object declaration](object-declarations.html)
+
+If you need to write a function that can be called without having a class instance but needs access to the internals
+of a class (for example, a factory method), you can write it as a member of an [object declaration](object-declarations.html)
+inside that class.
 
 Even more specifically, if you declare a [companion object](object-declarations.html#companion-objects) inside your class,
 you'll be able to call its members with the same syntax as calling static methods in Java/C#, using only the class name
