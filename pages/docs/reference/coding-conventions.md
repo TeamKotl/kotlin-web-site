@@ -13,6 +13,7 @@ title: Coding Conventions
 
 
 ## Naming Style
+If in doubt, default to the Java Coding Conventions such as:
 
 확실하지 않은 경우 ( java코딩 규칙의 예 )
 
@@ -55,6 +56,40 @@ list.filter { it > 10 }.map { element -> element * 2 }
 
  명시적으로, 매개변수를 사용한 중첩된 람다에서, 매개 변수는 항상 명시적으로 선언해야합니다.
 
+Classes with a few arguments can be written in a single line:
+
+```kotlin 
+class Person(id: Int, name: String)
+```
+
+Classes with longer headers should be formatted so that each primary constructor argument is in a separate line with indentation.
+Also, the closing parenthesis should be on a new line. If we use inheritance, then the superclass constructor call or list of implemented interfaces
+should be located on the same line as the parenthesis:
+
+```kotlin 
+class Person(
+    id: Int, 
+    name: String,
+    surname: String
+) : Human(id, name) {
+    // ...
+}
+```
+
+For multiple interfaces, the superclass constructor call should be located first and then each interface should be located in a different line:
+
+```kotlin 
+class Person(
+    id: Int, 
+    name: String,
+    surname: String
+) : Human(id, name),
+    KotlinMaker {
+    // ...
+}
+```
+
+Constructor parameters can use either the regular indent or the continuation indent (double the regular indent).
    
 
   ## Unit
@@ -62,7 +97,7 @@ list.filter { it > 10 }.map { element -> element * 2 }
 함수가 Unit을 반환하는 경우 반환 형식은 생략합니다.
 
 ``` kotlin
-fun foo() { 
+fun foo() {
     // ": Unit" is omitted here
   }
 ```

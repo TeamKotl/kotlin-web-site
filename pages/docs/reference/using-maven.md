@@ -33,6 +33,10 @@ Kotlin has an extensive standard library that can be used in your applications. 
 </dependencies>
 ```
 
+If you're targeting JDK 7 or JDK 8, you can use extended versions of the Kotlin standard library which contain
+additional extension functions for APIs added in new JDK versions. Instead of `kotlin-stdlib`, use `kotlin-stdlib-jre7`
+or `kotlin-stdlib-jre8`, depending on your JDK version.
+
 If your project uses [Kotlin reflection](/api/latest/jvm/stdlib/kotlin.reflect.full/index.html) or testing facilities, you need to add the corresponding dependencies as well.
 The artifact IDs are `kotlin-reflect` for the reflection library, and `kotlin-test` and `kotlin-test-junit`
 for the testing libraries.
@@ -139,6 +143,51 @@ In maven terms that means kotlin-maven-plugin should be run before maven-compile
     </plugins>
 </build>
 ```
+
+## Incremental compilation
+
+To make your builds faster, you can enable incremental compilation for Maven (supported since Kotlin 1.1.2).
+In order to do that, define the `kotlin.compiler.incremental` property:
+
+``` xml
+<properties>
+    <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+</properties>
+```
+
+Alternatively, run your build with the `-Dkotlin.compiler.incremental=true` option.
+
+## Annotation processing
+
+The Kotlin plugin supports annotation processors like _Dagger_. In order for them to work with Kotlin classes, configure the
+execution of `kapt`, the Kotlin annotation processing tool (supported since Kotlin 1.1.2).
+Specifically, you need to add an execution of the `kapt` goal before `compile`:
+
+``` xml
+<execution>
+    <id>kapt</id>
+    <goals>
+        <goal>kapt</goal>
+    </goals>
+    <configuration>
+        <sourceDirs>
+            <sourceDir>src/main/kotlin</sourceDir>
+            <sourceDir>src/main/java</sourceDir>
+        </sourceDirs>
+        <annotationProcessorPaths>
+            <!-- Specify your annotation processors here. -->
+            <annotationProcessorPath>
+                <groupId>com.google.dagger</groupId>
+                <artifactId>dagger-compiler</artifactId>
+                <version>2.9</version>
+            </annotationProcessorPath>
+        </annotationProcessorPaths>
+    </configuration>
+</execution>
+```
+
+You can find a complete sample project showing the use of Kotlin, Maven and Dagger in the
+[Kotlin examples repository](https://github.com/JetBrains/kotlin-examples/tree/master/maven/dagger-maven-example).
 
 ## Jar file
 
