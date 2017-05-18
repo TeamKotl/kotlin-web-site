@@ -13,6 +13,10 @@ title: Coding Conventions
 
 
 ## Naming Style
+<<<<<<< HEAD
+=======
+If in doubt, default to the Java Coding Conventions such as:
+>>>>>>> 880ee3a825c07ce13ef8fe181c9a0c8437213174
 
 확실하지 않은 경우 ( java코딩 규칙의 예 )
 
@@ -57,7 +61,23 @@ list.filter { it > 10 }.map { element -> element * 2 }
 
    
 
+<<<<<<< HEAD
   ## Unit
+=======
+Classes with longer headers should be formatted so that each primary constructor argument is in a separate line with indentation.
+Also, the closing parenthesis should be on a new line. If we use inheritance, then the superclass constructor call or list of implemented interfaces
+should be located on the same line as the parenthesis:
+
+```kotlin 
+class Person(
+    id: Int, 
+    name: String,
+    surname: String
+) : Human(id, name) {
+    // ...
+}
+```
+>>>>>>> 880ee3a825c07ce13ef8fe181c9a0c8437213174
 
 함수가 Unit을 반환하는 경우 반환 형식은 생략합니다.
 
