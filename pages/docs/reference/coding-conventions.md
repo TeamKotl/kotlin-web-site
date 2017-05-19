@@ -28,8 +28,6 @@ If in doubt, default to the Java Coding Conventions such as:
 
 *public 함수들은 kotlin문서에 표시되도록 문서가 있어야합니다.
 
- 
-
 ## Colon (콜론)
 
 콜론 앞에 공백이 있어서 타입과 super타입을 구분하고 콜론은 인스턴스와 타입을나눌때는 공백을 가지지 않습니다.
@@ -56,27 +54,33 @@ list.filter { it > 10 }.map { element -> element * 2 }
 
  명시적으로, 매개변수를 사용한 중첩된 람다에서, 매개 변수는 항상 명시적으로 선언해야합니다.
 
-Classes with a few arguments can be written in a single line:
+
+
+## Class header formatting
+
+파라메터가 적은 class는 한줄로 작성하실 수 있습니다.
 
 ```kotlin 
 class Person(id: Int, name: String)
 ```
 
-Classes with longer headers should be formatted so that each primary constructor argument is in a separate line with indentation.
-Also, the closing parenthesis should be on a new line. If we use inheritance, then the superclass constructor call or list of implemented interfaces
-should be located on the same line as the parenthesis:
+긴 header가 있는 class는 각 기본 생성자 인수가 들여쓰기가 되어있는 별도의 라인에 있도록 서식을 지정해야 합니다. 아래 코드 예시처럼 말이죠.
+
+[ Classes with longer headers should be formatted so that each primary constructor argument is in a separate line with indentation. ]
+
+또한, 닫는 괄호는 (parenthesis)새로운 다음 줄에 있어야 합니다. 상속을 하는경우, superclass의 생성자 호출 또는 구현된 인터페이스들의 목록은 괄호와 같은 줄에 있어야 합니다. 아래 코드의 `Human(id, name)` 를 예로 볼 수 있습니다.
 
 ```kotlin 
 class Person(
     id: Int, 
     name: String,
     surname: String
-) : Human(id, name) {
+) : Human(id, name) { 
     // ...
 }
 ```
 
-For multiple interfaces, the superclass constructor call should be located first and then each interface should be located in a different line:
+다중 인터페이스인경우, superclass의 생성자 호출을 먼저 작성해야 하며 각각의 인터페이스들은 다른 라인에 위치해야 합니다. 이또한 아래 예제에서 볼실 수 있습니다.
 
 ```kotlin 
 class Person(
@@ -89,8 +93,8 @@ class Person(
 }
 ```
 
-Constructor parameters can use either the regular indent or the continuation indent (double the regular indent).
-   
+생성자의 파라메터는 일반 들여 쓰기 또는 연속 들여 쓰기 (일반 들여 쓰기의 두 배)를 사용할 수 있습니다.
+
 
   ## Unit
 
