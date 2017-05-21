@@ -5,17 +5,16 @@ title: "Reference"
 
 # Reference
 
-Provides a complete reference to the Kotlin language and the [standard library](/api/latest/jvm/stdlib/index.html).
+kotlin 언어와 [standard library](/api/latest/jvm/stdlib/index.html) 의 완벽한 레퍼런스를 제공합니다.
 
-### Where to Begin
+### 어디서부터 시작해야 할까요?
 
-This reference is designed for you to easily learn Kotlin in a matter of hours.
-Start with the [basic syntax](basic-syntax.html), then proceed to more advanced topics.
-While reading, you can try out the examples in the [online IDE](http://try.kotlinlang.org/).
+이 레처런스는 여러분들을 위해 몇시간만에 korlin을 쉽게 학습할 수 있도록 만들어졌습니다.  [basic syntax](basic-syntax.html) 를 시작으로, 다음으로 점점 고급주제로 넘어가시면 됩니다. 읽는 동안에, 여러분은 [online IDE](http://try.kotlinlang.org/) 로 예제를 진행해 보실 수 있습니다.
 
-Once you get an idea of what Kotlin looks like, try yourself in solving some [Kotlin Koans](/docs/tutorials/koans.html) - interactive programming exercises.
-If you are not sure how to solve a Koan, or you're looking for a more elegant solution, check out [Kotlin idioms](idioms.html).
+일단 kotlin이 어떤 구조인지 생각해본다음, [Kotlin Koans](/docs/tutorials/koans.html) - 스스로 대화형 프로그래밍 연습문제를 해결해 보세요. 
+
+하지만 만약 Koan을 어떻게 풀어야하는지 확실하지 않거나 여러분이 더욱 세련된 솔루션을 찾고있다면,  [Kotlin idioms](idioms.html)을 확인해보세요.
 
 
 ### Browse offline
-You can download the entire reference documentation as a single [PDF file]({{ site.pdf_url }}).
+전체 참조 문서를 하나의 PDF file.c로 다운로드 할 수 있습니다.
