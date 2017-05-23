@@ -281,9 +281,7 @@ fun main(args: Array<String>) {
 
 ### - Underscores in numeric literals
 
-Java8에서 처럼 , kotlin에서도 numeric literals의 언더스코어 
-
-Just as in Java 8, Kotlin now allows to use underscores in numeric literals to separate groups of digits:
+Java8에서 처럼 , kotlin에서도 numeric literals에 언더스코어를 사용하여 숫자 그룹을 구분할 수 있습니다.:
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -302,12 +300,13 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-Read the [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/underscores-in-numeric-literals.md) for more details.
+자세한 사항은 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/underscores-in-numeric-literals.md) 에서 확인해주세요.
 
+### properties 의 짧은 구문 
 
-### Shorter syntax for properties
+### - Shorter syntax for properties
 
-For properties with the getter defined as an expression body, the property type can now be omitted:
+표현식의 바디에 정의되어 있는 getter메서드에 있는 속성의 경우에는, 속성 type을 생략가능합니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -325,10 +324,12 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-### Inline property accessors
+### 인라인의 속성 접근자 
 
-You can now mark property accessors with the `inline` modifier if the properties don't have a backing field.
-Such accessors are compiled in the same way as [inline functions](inline-functions.html).
+### - Inline property accessors
+
+이제 속성에 backing field가 없다면 `inline`으로 속성접근자를 표시하시면 됩니다.
+이러한 접근자는  [inline functions](inline-functions.html) (인라인 함수) 와 같은 방식으로 컴파일 됩니다..
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -346,15 +347,16 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-You can also mark the entire property as `inline` - then the modifier is applied to both accessors.
+전체 속성을 `inline` 으로 표시할 수도 있습니다. 그럼 modifier(수정자)가 두 접근자에 모두에 적용됩니다.
 
-Read the [documentation](inline-functions.html#inline-properties-since-11) and [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/inline-properties.md) for more details.
+자세한 내용은 [documentation](inline-functions.html#inline-properties-since-11) 와 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/inline-properties.md) 에서 확인하실 수 있습니다.
 
+### 로컬 delegated 속성 
 
-### Local delegated properties
+### -  Local delegated properties
 
-You can now use the [delegated property](delegated-properties.html) syntax with local variables.
-One possible use is defining a lazily evaluated local variable:
+로컬 변수와 함께  [delegated property](delegated-properties.html) 의 구문을 사용할 수 있습니다.
+한 가지 사용가능한 방법은 필요할 때 호출되서 사용할 수 있는 `lazily evaluated` 로컬 변수를 정의할 수 있습니다. 
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -380,13 +382,13 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-Read the [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/local-delegated-properties.md) for more details.
+자세한 사항은 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/local-delegated-properties.md) 에서 확인하세요.
 
+### delegated property의 바인딩 차단 
 
-### Interception of delegated property binding
+### - Interception of delegated property binding
 
-For [delegated properties](delegated-properties.html), it is now possible to intercept delegate to property binding using the
-`provideDelegate` operator.
+[delegated properties](delegated-properties.html)의 경우, 이제`provideDelegate` 연산자를 사용하여 속성 바인딩에 대한 delegate(위임)를 가로챌 수 있습니다.
 For example, if we want to check the property name before binding, we can write something like this:
 
 ``` kotlin
