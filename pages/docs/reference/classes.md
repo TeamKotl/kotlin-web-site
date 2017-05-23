@@ -285,15 +285,15 @@ class Bar1 : Foo() {
 
 그럼 생성자에서 지정해놓은 값이였거나 선언하지 않았던 값을 재정의 할 수있는것이죠!!!
 
-``` kotlin 
-interface Foo {
-    val count: Int
+```kotlin
+interface Foo{
+  val count: Int
 }
 
 class Bar1(override val count: Int) : Foo
 
 class Bar2 : Foo {
-    override var count: Int = 0
+  	override var count: Int = 0
 }
 ```
 
@@ -301,11 +301,9 @@ class Bar2 : Foo {
 
 ### 오버라이딩 규칙  (Overriding Rules)
 
-kotlin에서 구현 상속은,
+kotlin에서 구현 상속은 다음 규칙에 의해 규제되는데,  만약 클래스가 직접 슈퍼클래스로부터 같은 멤버의 구현을 상속받는다면, 그 멤버들을 override하여 독자적으로 기능을 구현하여 제공할 해야합니다. (아마 상속된 것들중 하나를 사용하여... )
 
-In Kotlin, implementation inheritance is regulated by the following rule: if a class inherits many implementations of the same member from its immediate superclasses,
-it must override this member and provide its own implementation (perhaps, using one of the inherited ones).
-To denote the supertype from which the inherited implementation is taken, we use *super*{: .keyword } qualified by the supertype name in angle brackets, e.g. `super<Base>`:
+상속된 구현을 가지고 있는 supertype을 나타내기 위해 , *super*{: .keyword }  를 사용할 수있습니다.  예를 들어보면, `super<Base>`꺽쇠 괄호 안의 `super`유형의 이름 으로 나타낼 수 있습니다. 
 
 ``` kotlin
 open class A {
@@ -314,12 +312,12 @@ open class A {
 }
 
 interface B {
-    fun f() { print("B") } // interface members are 'open' by default
+    fun f() { print("B") } // 인터페이스의 멤버는 `open`이 기본입니다.
     fun b() { print("b") }
 }
 
 class C() : A(), B {
-    // The compiler requires f() to be overridden:
+    // 컴파일러는 override된 f() 를 요구합니다.
     override fun f() {
         super<A>.f() // call to A.f()
         super<B>.f() // call to B.f()
@@ -327,9 +325,9 @@ class C() : A(), B {
 }
 ```
 
-It's fine to inherit from both `A` and `B`, and we have no problems with `a()` and `b()` since `C` inherits only one implementation of each of these functions.
-But for `f()` we have two implementations inherited by `C`, and thus we have to override `f()` in `C`
-and provide our own implementation that eliminates the ambiguity.
+위의 예제를보면  `A` 와`B` 클래스를 모두 상속받으면, `a()` 와  `b()`  는 아무 문제가 없다. 왜냐하면`C`는 이들 각각의 함수의 한 구현만을 상속 받기 때문이다.
+
+하지만 `c` 로 부터 f() 는 두개의 구현 상속을 받고, 따라서 우리는`C`에서`f ()`를 오버라이드해야합니다. 그리고 모호성을 제거하도록  자체적인 구현을 제공하시면 됩니다.
 
 ## 추상 클래스  ( Abstract Classes )
 

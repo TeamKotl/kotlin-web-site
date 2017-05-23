@@ -13,6 +13,7 @@ title: Coding Conventions
 
 
 ## Naming Style
+If in doubt, default to the Java Coding Conventions such as:
 
 확실하지 않은 경우 ( java코딩 규칙의 예 )
 
@@ -26,8 +27,6 @@ title: Coding Conventions
 * 띄어쓰기 4 만큼의 공간 들여 쓰기
 
 *public 함수들은 kotlin문서에 표시되도록 문서가 있어야합니다.
-
- 
 
 ## Colon (콜론)
 
@@ -55,14 +54,54 @@ list.filter { it > 10 }.map { element -> element * 2 }
 
  명시적으로, 매개변수를 사용한 중첩된 람다에서, 매개 변수는 항상 명시적으로 선언해야합니다.
 
-   
+
+
+## Class header formatting
+
+파라메터가 적은 class는 한줄로 작성하실 수 있습니다.
+
+```kotlin 
+class Person(id: Int, name: String)
+```
+
+긴 header가 있는 class는 각 기본 생성자 인수가 들여쓰기가 되어있는 별도의 라인에 있도록 서식을 지정해야 합니다. 아래 코드 예시처럼 말이죠.
+
+[ Classes with longer headers should be formatted so that each primary constructor argument is in a separate line with indentation. ]
+
+또한, 닫는 괄호는 (parenthesis)새로운 다음 줄에 있어야 합니다. 상속을 하는경우, superclass의 생성자 호출 또는 구현된 인터페이스들의 목록은 괄호와 같은 줄에 있어야 합니다. 아래 코드의 `Human(id, name)` 를 예로 볼 수 있습니다.
+
+```kotlin 
+class Person(
+    id: Int, 
+    name: String,
+    surname: String
+) : Human(id, name) { 
+    // ...
+}
+```
+
+다중 인터페이스인경우, superclass의 생성자 호출을 먼저 작성해야 하며 각각의 인터페이스들은 다른 라인에 위치해야 합니다. 이또한 아래 예제에서 볼실 수 있습니다.
+
+```kotlin 
+class Person(
+    id: Int, 
+    name: String,
+    surname: String
+) : Human(id, name),
+    KotlinMaker {
+    // ...
+}
+```
+
+생성자의 파라메터는 일반 들여 쓰기 또는 연속 들여 쓰기 (일반 들여 쓰기의 두 배)를 사용할 수 있습니다.
+
 
   ## Unit
 
 함수가 Unit을 반환하는 경우 반환 형식은 생략합니다.
 
 ``` kotlin
-fun foo() { 
+fun foo() {
     // ": Unit" is omitted here
   }
 ```

@@ -4,9 +4,9 @@ layout: reference
 title: "What's New in Kotlin 1.1"
 ---
 
-# What's New in Kotlin 1.1
+# Kotlin 1.1의 새로운 기능
 
-## Table of Contents
+## 목차
 
 * [Coroutines](#coroutines-experimental)
 * [Other language features](#other-language-features)
@@ -16,44 +16,44 @@ title: "What's New in Kotlin 1.1"
 
 ## JavaScript
 
-Starting with Kotlin 1.1, the JavaScript target is no longer considered experimental. All language features are supported,
-and there are many new tools for integration with the front-end development environment. See [below](#javascript-backend) for
-a more detailed list of changes.
+Kotlin 1.1부터는,  JavaScript의  target이 더이상 실험적이라고 생각하지 않으셔도 됩니다. 모든 언어의 기능이 지원되며느 프론트엔드의 환경의 통합을 위한 새로운 tool들이 많아졌습니다! 
 
-## Coroutines (experimental)
+아래부터[ [below](#javascript-backend) ]  변경사항에 대한 자세한 부분을 알 수 있습니다.
 
-The key new feature in Kotlin 1.1 is *coroutines*, bringing the support of `async`/`await`, `yield` and similar programming
-patterns. The key feature of Kotlin's design is that the implementation of coroutine execution is part of the libraries,
-not the language, so you aren't bound to any specific programming paradigm or concurrency library.
+## 코루틴 (실험적 적용사항) - Coroutines (experimental)
 
-A coroutine is effectively a light-weight thread that can be suspended and resumed later. Coroutines are supported through [*suspending functions*](coroutines.html#suspending-functions): a call to such a function can potentially suspend a coroutine, and to start a new coroutine we usually use an anonymous suspending functions (i.e. suspending lambdas).  
+kotlin 1.1의 핵심 신기능인 *coroutines* 은, `async`/`await`, `yield`  및 유사한 프로그래밍 패턴을 지원합니다.  kotlin의 디자인 핵심기능은 *coroutines* 실행의 구현이 라이브러리의 일부이며, 언어가 아니기 때문에 어떤  특정 프로그래밍의  패러다임이나 동시성 라이브러리에 국한되지 않습니다.
 
-Let's look at `async`/`await` which is implemented in an external library, [kotlinx.coroutines](https://github.com/kotlin/kotlinx.coroutines): 
+*coroutine* 은 일시중단 되고 다시 시작할 수 있는 경량 스레드 입니다. *coroutine* 은  일시중단 기능을 통해 지원됩니다. 
+
+[*suspending functions*](coroutines.html#suspending-functions): 이러한 함수를 호출하면 *coroutine*을 잠시 중단할 수 있고, 새로운 *coroutine*을 시작하기 위해 일반적으로 익명의 일시중지 기능을 사용합니다. (즉 , 람다의 일시정지 )
+
+외부 라이브러리 [kotlinx.coroutines](https://github.com/kotlin/kotlinx.coroutines): 로 구현된  `async`/`await`  를 살펴보실 수  있습니다.
 
 ``` kotlin
-// runs the code in the background thread pool
+// 백그라운드 스레드풀에서 코드를 실행합니다.
 fun asyncOverlay() = async(CommonPool) {
-    // start two async operations
+    // 두개의 async를 운영합니다.
     val original = asyncLoadImage("original")
     val overlay = asyncLoadImage("overlay")
-    // and then apply overlay to both results
+    // 두 결과에 overlay를 적용합니다.
     applyOverlay(original.await(), overlay.await())
 }
 
-// launches new coroutine in UI context
+// UI context에서 새로운 coroutine을 실행합니다.
 launch(UI) {
-    // wait for async overlay to complete
+    // 비동기 async가 완료될때까지 기다립니다.
     val image = asyncOverlay().await()
-    // and then show it in UI
+    // UI를 보여줍니다.
     showImage(image)
 }
 ```
 
-Here, `async { ... }` starts a coroutine and, when we use `await()`, the execution of the coroutine is suspended while the operation being awaited is executed, and is resumed (possibly on a different thread) when the operation being awaited completes.
+여기, `async { ... }` 은 coroutine 을 실행하고, 여러분이 `await()` 를 사용할때, 기다리고있는 작업이 실행되는 동안 coroutine의 실행이 일시 중단되고, 작업이 대기 될 때 (아마도 다른 스레드에서) 다시 시작되어 완료됩니다.
 
-The standard library uses coroutines to support *lazily generated sequences* with `yield` and `yieldAll` functions.
-In such a sequence, the block of code that returns sequence elements is suspended after each element has been retrieved,
-and resumed when the next element is requested. Here's an example:
+표준 라이브러리는 coroutine을 사용하여  `yield` 및 `yieldAll` 함수로 지연 생성 시퀀스(lazily generated sequences)를 제공합니다.
+
+이러한 시퀀스에서, 시퀀스의 요소를 반환하는 코드블럭은 각 요소가 재시작된 이후에 일시 중단 되며, 다음 요소가 요청될 때 재개됩니다. 아래에서 예시를 보실 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1"> 
 
@@ -61,13 +61,13 @@ and resumed when the next element is requested. Here's an example:
 import kotlin.coroutines.experimental.*
 
 fun main(args: Array<String>) {
-//sampleStart
+//예제 시작 
   val seq = buildSequence {
       for (i in 1..5) {
           // yield a square of i
           yield(i * i)
       }
-      // yield a range
+      // yield a range //?
       yieldAll(26..28)
   }
   
@@ -79,64 +79,63 @@ fun main(args: Array<String>) {
 
 </div>
 
+위의 예제를 실행하여 결과를 확인해보세요. 언제든지 편집하고 다시 실행해볼 수 있습니다!
 
-Run the code above to see the result. Feel free to edit it and run again!
+더 많은 정보를 보기위해서는,  [coroutine documentation](/docs/reference/coroutines.html) 과 [tutorial](/docs/tutorials/coroutines-basic-jvm.html) 을 확인해 보시면 됩니다.
 
-For more information, please refer to the [coroutine documentation](/docs/reference/coroutines.html) and [tutorial](/docs/tutorials/coroutines-basic-jvm.html).
-
-Note that coroutines are currently considered an **experimental feature**, meaning that the Kotlin team is not committing
-to supporting the backwards compatibility of this feature after the final 1.1 release.
+coroutine은 현제 **실험적 기능**으로 간주됩니다. 이것은, Kotlin 팀이 최종 1.1 릴리스 이후에 이 기능의 이전 버전과의 호환성을 지원하지 않는다는 것을 의미합니다.
 
 
-## Other Language Features
+## 기타 언어 기능 - Other Language Features
 
 ### Type aliases
 
-A type alias allows you to define an alternative name for an existing type.
-This is most useful for generic types such as collections, as well as for function types.
-Here is an example:
+Type alias 를 사용하면 기존 type 에 대한 대체 이름을 정의할 수 있습니다. 이건 collection과 같은 generic type이나 function type (함수타입)에 가장 유용합니다.
+
+아래에서 예를 보실 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
 ``` kotlin
-//sampleStart
-typealias OscarWinners = Map<String, String>
+//samplestart
+typealias OscarWinners = map<Stirng, string>
 
 fun countLaLaLand(oscarWinners: OscarWinners) =
-        oscarWinners.count { it.value.contains("La La Land") }
+oscarWinner.count {it.value.contains("La La Land")}
 
-// Note that the type names (initial and the type alias) are interchangeable:
-fun checkLaLaLandIsTheBestMovie(oscarWinners: Map<String, String>) =
-        oscarWinners["Best picture"] == "La La Land"
-//sampleEnd
+// Note that the type name (initial and the type alias) are interchangeable
+fun checkLaLaLandIsTheBestMove(oscarwinners: Map<String, String>) =
+oscarWinners["Best picture"] == "La La Land"
 
-fun oscarWinners(): OscarWinners {
-    return mapOf(
-            "Best song" to "City of Stars (La La Land)",
-            "Best actress" to "Emma Stone (La La Land)",
+fun oscarWinners(); OscarWinners {
+  return mapOf(
+  			"Best Song" to "City of Stars (La La Land)",
+    		"Best actress" to "Emma Stone (La La Land)",
             "Best picture" to "Moonlight" /* ... */)
+  )
 }
 
-fun main(args: Array<String>) {
-    val oscarWinners = oscarWinners()
-
-    val laLaLandAwards = countLaLaLand(oscarWinners)
-    println("LaLaLandAwards = $laLaLandAwards (in our small example), but actually it's 6.")
-
+fum main(args: Array<String>) {
+  	val oscarWinners = oscarWinners()
+  
+  	val laLaLandAwards = countLaLALAnd(oscarWinners)
+  	println("LaLaLandAwards = $laLaLandAwards (in our small example), but actually it's 6.")
+})
     val laLaLandIsTheBestMovie = checkLaLaLandIsTheBestMovie(oscarWinners)
     println("LaLaLandIsTheBestMovie = $laLaLandIsTheBestMovie")
 }
 ```
 </div>
 
-See the [documentation](type-aliases.html) and [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/type-aliases.md) for more details.
+자세한 설명은 [documentation](type-aliases.html) 와 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/type-aliases.md) 을 참고해주세요.
 
 
-### Bound callable references
 
-You can now use the `::` operator to get a [member reference](reflection.html#function-references) pointing to a method or property of a specific object instance.
-Previously this could only be expressed with a lambda.
-Here's an example:
+### 레퍼런스 호출 - Bound callable references 
+
+이제 `::` 연산자를 사용하여 특정 객체 인스턴스의 메서드나 속성을 가리키는 [member reference](reflection.html#function-references) 를 가져올 수 있습니다. 예전에는 lamda표현식을 이용해서만 사용할 수 있었습니다.
+
+아래 예제를 보실 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -153,15 +152,17 @@ fun main(args: Array<String>) {
 </div>
 
 
-Read the [documentation](reflection.html#bound-function-and-property-references-since-11) and [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/bound-callable-references.md) for more details.
+자세한 사항은 [documentation](reflection.html#bound-function-and-property-references-since-11) 와 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/bound-callable-references.md) 를 참조해 주세요!
 
 
-### Sealed and data classes
 
-Kotlin 1.1 removes some of the restrictions on sealed and data classes that were present in Kotlin 1.0.
-Now you can define subclasses of a top-level sealed class on the top level in the same file, and not just as nested classes of the sealed class.
-Data classes can now extend other classes.
-This can be used to define a hierarchy of expression classes nicely and cleanly:
+### Sealed and data classes  
+
+kotlin 1.0에서는 `sealed`  가 붙어진 봉인class 모든 서브class가 모두 봉인class의 안에 위치해야 했습니다.
+
+하지만 Kotlin 1.1에서는 kotlin 1.0에 있는 data class 및 class에 대한 일부 제한을 제거했습니다. 이제 최상위 레벨인 **봉인class**의 하위 class를  **봉인class**의 중첩된 class가아닌 같은 파일의 최상위 레벨에 정의할 수 있습니다. 
+
+Data class는 이제 다른 클래스를 확장 할 수 있습니다. 이는 표현 class의 계층구조를 훌륭하고 명확하게 정의하는데 사용할 수있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -185,17 +186,35 @@ fun main(args: Array<String>) {
     println("e is $e") // 3.0
 }
 ```
+```kotlin
+// 예제 아래 링크되어있는 sealed class의 설명에서 볼 수 있는 보다 쉬운 예제입니다.
+// FILE: 1.kt
+sealed class A {
+  class B : A() { // B is declared inside A -- ok
+    class C: A() // C is declared inside A -- ok
+  }
+}
+
+class D : A() { // D and A are declared in same file -- ok
+  
+  class E : A() // E is declared outside A -- error 
+}
+
+// FILE: 2.kt
+class F: A() // F and A are declared in different files -- error
+```
+
 </div>
 
-Read the [documentation](sealed-classes.html#relaxed-rules-for-sealed-classes-since-11) or 
-[sealed class](https://github.com/Kotlin/KEEP/blob/master/proposals/sealed-class-inheritance.md) and
-[data class](https://github.com/Kotlin/KEEP/blob/master/proposals/data-class-inheritance.md) KEEPs for more detail.
+더 궁금하시 사항은  [documentation](sealed-classes.html) 이나
+[sealed class](https://github.com/Kotlin/KEEP/blob/master/proposals/sealed-class-inheritance.md) ,
+[data class](https://github.com/Kotlin/KEEP/blob/master/proposals/data-class-inheritance.md) 에서 확인하실 수 있습니다.
 
 
-### Destructuring in lambdas
 
-You can now use the [destructuring declaration](multi-declarations.html) syntax to unpack the arguments passed to a lambda.
-Here's an example:
+### 람다의 Destructuring - Destructuring in lambdas
+
+이제  [destructuring declaration](multi-declarations.html) 선언 구문을 사용하여 람다에 압축되어 전달 된 인수를 해제하여 볼 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -215,12 +234,15 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-Read the [documentation](multi-declarations.html#destructuring-in-lambdas-since-11) and [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/destructuring-in-parameters.md) for more details.
+자세한 내용은 [documentation](multi-declarations.html#destructuring-in-lambdas-since-11) 와 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/destructuring-in-parameters.md)에서 확인 하실 수 있습니다.
 
 
-### Underscores for unused parameters
 
-For a lambda with multiple parameters, you can use the `_` character to replace the names of the parameters you don't use:
+### 사용하지 않는 파리메터(인수) 를 위한 언더스코어 
+
+### - Underscores for unused parameters
+
+여러개의 파라메터가 존재하는 람다의 경우, `_` 문자를 사용하여 여러분이 사용하지않는 파라메터의 이름이 있는곳에 바꿔 사용할 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -235,7 +257,7 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-This also works in [destructuring declarations](multi-declarations.html):
+이것은 [destructuring declarations](multi-declarations.html) 에도 효과적입니다:
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -253,10 +275,13 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-Read the [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/underscore-for-unused-parameters.md) for more details.
+ [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/underscore-for-unused-parameters.md) 에서 자세한 내용을 확인하실 수 있습니다.
 
+### numeric(숫자) literals의 언더스코어 
 
-### Underscores in numeric literals
+### - Underscores in numeric literals
+
+Java8에서 처럼 , kotlin에서도 numeric literals의 언더스코어 
 
 Just as in Java 8, Kotlin now allows to use underscores in numeric literals to separate groups of digits:
 
@@ -468,7 +493,7 @@ inputDir.walk()
 ### also(), takeIf() and takeUnless()
 
 These are three general-purpose extension functions applicable to any receiver.
- 
+
 `also` is like `apply`: it takes the receiver, does some action on it, and returns that receiver. 
 The difference is that in the block inside `apply` the receiver is available as `this`, 
 while in the block inside `also` it's available as `it` (and you can give it another name if you want).

@@ -17,7 +17,7 @@ In IntelliJ IDEA go to *File -> New > Project...*:
 
 <img src="{{ url_for('tutorial_img', filename='coroutines-basic-jvm/new_gradle_project_jvm.png')}}"/>
 
-Then follow the wizard steps. You'll have a `build.gradle` file created with Kotlin configured according to [this document](g/docs/reference/using-gradle.html).
+Then follow the wizard steps. You'll have a `build.gradle` file created with Kotlin configured according to [this document](/docs/reference/using-gradle.html).
 Make sure it's configured for Kotlin 1.1 or higher.
 
 Since coroutines have the *experimental* status in Kotlin 1.1, by default the compiler reports a warning every time they are used. We can opt-in for the experimental feature and use it without a warning by adding this code to `build.gradle`:
@@ -32,12 +32,20 @@ kotlin {
 }
 ```
 
-Since we'll be using the [`kotlinx.coroutines`](https://github.com/Kotlin/kotlinx.coroutines), let's add it to our dependencies:
+Since we'll be using the [`kotlinx.coroutines`](https://github.com/Kotlin/kotlinx.coroutines), let's add its recent version to our dependencies:
 
 ```groovy
 dependencies {
     ...
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.12"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.15"
+}
+```
+
+This library is published to Bintray JCenter repository, so let us add it:
+ 
+```groovy
+repositories {
+    jcenter()
 }
 ```
 
@@ -67,7 +75,7 @@ Since coroutines have the *experimental* status in Kotlin 1.1, by default the co
 </plugin>
 ```
 
-Since we'll be using the [`kotlinx.coroutines`](https://github.com/Kotlin/kotlinx.coroutines), let's add it to our dependencies:
+Since we'll be using the [`kotlinx.coroutines`](https://github.com/Kotlin/kotlinx.coroutines), let's add its recent version to our dependencies:
 
 ```xml
 <dependencies>
@@ -75,9 +83,21 @@ Since we'll be using the [`kotlinx.coroutines`](https://github.com/Kotlin/kotlin
     <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlinx-coroutines-core</artifactId>
-        <version>0.12</version>
+        <version>0.15</version>
     </dependency>
 </dependencies>
+```
+
+This library is published to Bintray JCenter repository, so let us add it:
+ 
+```xml
+<repositories>
+    ...
+    <repository>
+        <id>central</id>
+        <url>http://jcenter.bintray.com</url>
+    </repository>
+</repositories>
 ```
 
 That's it, we are good to go and write code under `src/main/kotlin`.
