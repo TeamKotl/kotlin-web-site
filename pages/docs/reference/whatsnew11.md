@@ -389,7 +389,8 @@ fun main(args: Array<String>) {
 ### - Interception of delegated property binding
 
 [delegated properties](delegated-properties.html)의 경우, 이제`provideDelegate` 연산자를 사용하여 속성 바인딩에 대한 delegate(위임)를 가로챌 수 있습니다.
-For example, if we want to check the property name before binding, we can write something like this:
+
+예를들어, 바인딩하기전에 속성의 이름을 체크하려면 아래의 예제와 같이 작성할 수 있습니다.
 
 ``` kotlin
 class ResourceLoader<T>(id: ResourceID<T>) {
@@ -409,15 +410,14 @@ class MyUI {
 }
 ```
 
-The `provideDelegate` method will be called for each property during the creation of a `MyUI` instance, and it can perform
-the necessary validation right away.
+ `provideDelegate` 메서드는 `MyUI` 인스턴스를 생성하는 동안 각 속성에 대해 호출되며 필요한 검증을 바로 수행 할 수 있습니다.
 
-Read the [documentation](delegated-properties.html#providing-a-delegate-since-11) for more details.
+자세한 정보는 [documentation](delegated-properties.html#providing-a-delegate-since-11) 에서 확인하세요.
 
 
 ### Generic enum value access
 
-It is now possible to enumerate the values of an enum class in a generic way.
+이제 enum class의 값을 일반적인 방법으로 열거할 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -436,10 +436,13 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-### Scope control for implicit receivers in DSLs
+### DSL에서 암시적 리시버의 범위제어
 
-The [`@DslMarker`](/api/latest/jvm/stdlib/kotlin/-dsl-marker/index.html) annotation allows to restrict the use of receivers from outer scopes in a DSL context.
-Consider the canonical [HTML builder example](type-safe-builders.html):
+### - Scope control for implicit receivers in DSLs
+
+[`@DslMarker`](/api/latest/jvm/stdlib/kotlin/-dsl-marker/index.html) annotation(어노테이션)은 DSL 컨텍스트에서 외부 스코프의 리시버의 사용을 제한할 수 있습니다.
+
+정식 [HTML builder example](type-safe-builders.html) 예제를 확인해보세요.:
 
 ``` kotlin
 table {
@@ -449,8 +452,11 @@ table {
 }
 ```
 
-In Kotlin 1.0, code in the lambda passed to `td` has access to three implicit receivers: the one passed to `table`, to `tr`
-and to `td`. This allows you to call methods that make no sense in the context - for example to call `tr` inside `td` and thus
+kotlin 1.0에서는, `td` 에 전달된 lamda코드는 세 개의 암묵적인 리시버에 대한 접근(액세스)권한을 가집니다. : (`tr` 및 `td` , `table` 호 전달된 리시버)
+
+
+
+This allows you to call methods that make no sense in the context - for example to call `tr` inside `td` and thus
 to put a `<tr>` tag in a `<td>`.
 
 In Kotlin 1.1, you can restrict that, so that only methods defined on the implicit receiver of `td`
