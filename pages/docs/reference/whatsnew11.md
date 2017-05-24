@@ -454,7 +454,11 @@ table {
 
 kotlin 1.0에서는, `td` 에 전달된 lamda코드는 세 개의 암묵적인 리시버에 대한 접근(액세스)권한을 가집니다. : (`tr` 및 `td` , `table` 호 전달된 리시버)
 
+```t
+Kotlin 1.0에서 td에 전달 된 lambda의 코드는 세 개의 암시적인 수신기 (테이블, tr 및 td로 전달 된 수신기)에 대한 액세스 권한을가집니다. 이렇게하면 컨텍스트에서 의미가없는 메소드를 호출 할 수 있습니다. 예를 들어 td에서 tr을 호출하여 <tr> 태그를 <td>에 넣을 수 있습니다.
 
+Kotlin 1.1에서는이를 제한 할 수 있으므로 td의 암시적인 수신기에 정의 된 메서드 만 td에 전달 된 람다 내부에서 사용할 수 있습니다. @DslMarker 메타 주석으로 표시된 주석을 정의하고이를 태그 클래스의 기본 클래스에 적용하면됩니다.
+```
 
 This allows you to call methods that make no sense in the context - for example to call `tr` inside `td` and thus
 to put a `<tr>` tag in a `<td>`.
