@@ -55,21 +55,21 @@ class내부에서 선언된 멤버인 경우:
 
 * 클래스 내부에서 `private` 의 의미는 이 클래스에서만 접근가능하다는 의미입니다. (모든 멤버 포함) 
 * `protected` ---  `private` 와 동일 + 하위 클래스에서도 볼 수 있습니다.
-* `internal` —  선언한 클래스를 보는 *이 모듈 내부의* 클라이언트는 내부 멤버를 볼 수 있습니다.
-* `public` --- any client who sees the declaring class sees its `public` members.
+* `internal` —  선언한 클래스를 보는 *이 모듈 내부의*  클라이언트는 내부 멤버만 볼 수 있습니다.
+* `public` — 클래스에 선언된 `public` 멤버는 누구든 볼 수 있습니다.
 
-*NOTE* for Java users: outer class does not see private members of its inner classes in Kotlin.
+Java 사용자를 위한 *NOTE* :  Kotlin에서 외부 클래스는 내부 클래스의 `private` 멤버를 보지 못합니다.
 
-If you override a `protected` member and do not specify the visibility explicitly, the overriding member will also have `protected` visibility.
+만약 `protected` 멤버를 오버라이드 하거나 명시적으로 가시성을 지정하지 않는다면, 오버라이딩 되는 멤버는 `protected` 가시성을 가져야 합니다.
 
-Examples:
+아래서 예시 보실 수 있습니다.:
 
 ``` kotlin
 open class Outer {
     private val a = 1
     protected open val b = 2
     internal val c = 3
-    val d = 4  // public by default
+    val d = 4  // public 기본
     
     protected class Nested {
         public val e: Int = 5
@@ -77,11 +77,11 @@ open class Outer {
 }
 
 class Subclass : Outer() {
-    // a is not visible
-    // b, c and d are visible
-    // Nested and e are visible
+    // a 는 접근할 수 없습니다.
+    // b, c 그리고 d 는 접근 가능합니다.
+    // Nested 클래스와 e 는 접근 가능합니다.
 
-    override val b = 5   // 'b' is protected
+    override val b = 5   // 'b'는 protected로 위에 선언되어있기 때문에 이것도 protected입니다.
 }
 
 class Unrelated(o: Outer) {
@@ -91,29 +91,25 @@ class Unrelated(o: Outer) {
 }
 ```
 
-### Constructors
+### 생성자 Constructors
 
-To specify a visibility of the primary constructor of a class, use the following syntax (note that you need to add an
-explicit *constructor*{: .keyword } keyword):
+클래스의 기본 생성자에 대한 표시 여부를 지정하려면 다음 구문을 사용합니다. (명시적으로  *constructor*{: .keyword } 키워드를 추가해야합니다 ):
 
 ``` kotlin
 class C private constructor(a: Int) { ... }
 ```
 
-Here the constructor is private. By default, all constructors are `public`, which effectively
-amounts to them being visible everywhere where the class is visible (i.e. a constructor of an `internal` class is only 
-visible within the same module).
+위의 예제의 생성자는 `private` 입니다. 기본적으로는 모든 생성자는 `public` 이고,   클래스가 보이는 모든 곳에서 볼 수 있습니다. ( 즉, `internal` 클래스의 생성자는 동일한 모듈안에서만 볼 수 있습니다.)
 ​     
-### Local declarations
+### 로컬 선언 Local declarations
 
-Local variables, functions and classes can not have visibility modifiers.
+로컬 변수, functions 그리고 classes는 가시성 수정자가 포함될 수 없습니다.
 
 
-## Modules
+## 모듈 Modules
 
-The `internal` visibility modifier means that the member is visible with the same module. More specifically,
-a module is a set of Kotlin files compiled together:
+`internal` 가시성 수정자는 멤버가 동일한 모듈에서 볼 수 있음을 의미합니다. 보다 구체적으로 모듈은 함께 컴파일 된 Kotlin 파일 set입니다.
 
-* an IntelliJ IDEA module;
-  * a Maven or Gradle project;
-  * a set of files compiled with one invocation of the <kotlinc> Ant task.
+* IntelliJ IDEA 모듈;
+  *  Maven 이나 Gradle project;
+  *  <kotlinc> Ant 테스크를 한번 호출하여 컴파일된 파일 set.
