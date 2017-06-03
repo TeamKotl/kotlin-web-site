@@ -7,13 +7,13 @@ title: "Extensions"
 
 # Extensions
 
-Kotlin, similar to C# and Gosu, provides the ability to extend a class with new functionality without having to inherit from the class or use any type of design pattern such as Decorator.
-This is done via special declarations called _extensions_. Kotlin supports _extension functions_ and _extension properties_.
+kotlin은 C#과 Gosu와 유사하게 class에서 상속하거나 Decorator와 같은 모든 유형의 디자인 패턴을 사용하지 않고도 새로운 기능으로 클래스를 확장 할 수 있습니다.  Extensions은 특별한 선언을 통해 이루어 집니다. kotlin은 extension functions 와 extensions 의 속성을 지원합니다.
 
 ## Extension Functions
 
-To declare an extension function, we need to prefix its name with a _receiver type_, i.e. the type being extended.
-The following adds a `swap` function to `MutableList<Int>`:
+Extensions function을 선언하려면, 이름앞에 수신자 유형 즉, `receiver type`  확장되는 유형을 붙이면 됩니다.
+
+아래 예제는  `MutableList<Int>` 에 `swap` 함수를 추가합니다.
 
 ``` kotlin
 fun MutableList<Int>.swap(index1: Int, index2: Int) {
@@ -23,15 +23,16 @@ fun MutableList<Int>.swap(index1: Int, index2: Int) {
 }
 ```
 
-The *this*{: .keyword } keyword inside an extension function corresponds to the receiver object (the one that is passed before the dot). 
-Now, we can call such a function on any `MutableList<Int>`:
+extension function 내의  *this*{: .keyword } 키워드는 수신자객체(receiver object) 에 해당합니다. (점앞에 전달되는 객체 :  `MutableList<Int>.swap`)
+
+이제 `MutableList<Int>` 에서 아래의 예제와 같은 함수를 부르실 수 있습니다.
 
 ``` kotlin
 val l = mutableListOf(1, 2, 3)
 l.swap(0, 2) // 'this' inside 'swap()' will hold the value of 'l'
 ```
 
-Of course, this function makes sense for any `MutableList<T>`, and we can make it generic:
+물론, 위의 함수는 임의이 `MutableList<T>` 에 대해서만 의미가 있고, 여러분은 그것을 일반화 시킬 수 있습니다.
 
 ``` kotlin
 fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
@@ -41,13 +42,13 @@ fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
 }
 ```
 
-We declare the generic type parameter before the function name for it to be available in the receiver type expression. 
-See [Generic functions](generics.html).
+여러분은 generic 형식 매개 변수를 함수 이름이  receiver type에서 사용 가능하기 전에 선언하시면 됩니다. (`fun <T> MutableList<T>.swap`)
 
-## Extensions are resolved **statically**
+ [Generic functions](generics.html) 를 참고 하시면 됩니다 .
 
-Extensions do not actually modify classes they extend. By defining an extension, you do not insert new members into a class,
-but merely make new functions callable with the dot-notation on variables of this type.
+## Extensions는 정적으로 해결 Extensions are resolved **statically**
+
+Extensions는 실제로 확장된 class를 수정하지않습니다. extension을 정의하게 되면, 클래스에 새로운 member를  insert 하지 않고, but merely make new functions callable with the dot-notation on variables of this type.
 
 We would like to emphasize that extension functions are dispatched **statically**, i.e. they are not virtual by receiver type.
 This means that the extension function being called is determined by the type of the expression on which the function is invoked,
@@ -159,12 +160,12 @@ MyClass.foo()
 ## Scope of Extensions
 
 Most of the time we define extensions on the top level, i.e. directly under packages:
- 
+
 ``` kotlin
 package foo.bar
  
 fun Baz.goo() { ... } 
-``` 
+```
 
 To use such an extension outside its declaring package, we need to import it at the call site:
 
@@ -258,7 +259,7 @@ C1().caller(D())  // prints "D.foo in C1" - dispatch receiver is resolved virtua
 C().caller(D1())  // prints "D.foo in C" - extension receiver is resolved statically
 ```
 
- 
+
 ## Motivation
 
 In Java, we are used to classes named "\*Utils": `FileUtils`, `StringUtils` and so on. The famous `java.util.Collections` belongs to the same breed.
