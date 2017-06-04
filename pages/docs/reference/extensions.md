@@ -48,11 +48,13 @@ fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
 
 ## Extensions는 정적으로 해결 Extensions are resolved **statically**
 
-Extensions는 실제로 확장된 class를 수정하지않습니다. extension을 정의하게 되면, 클래스에 새로운 member를  insert 하지 않고, but merely make new functions callable with the dot-notation on variables of this type.
+Extensions는 실제로 확장된 class를 수정하지않습니다. extension을 정의하게 되면, 클래스에 새로운 member를  insert 하지 않고, 이 유형의 변수에 점 표기법으로 호출 할 수있는 새로운 함수를 만들뿐입니다. 
 
-We would like to emphasize that extension functions are dispatched **statically**, i.e. they are not virtual by receiver type.
-This means that the extension function being called is determined by the type of the expression on which the function is invoked,
-not by the type of the result of evaluating that expression at runtime. For example:
+kotlin은 extension기능을 **정적으로** 전달 된다는 점을 강조하고 싶습니다. 즉, receiver type에 따라 가상의 함수가 아닙니다.
+
+이것은 호출되는 extension 함수는 런타임에 해당 표현식을 평가한 결과의 유형이 아니라 호출되는 함수의 표현식의 type에 따라 결정됩니다.
+
+아래 예제를 보실 수 있습니다. 
 
 ``` kotlin
 open class C
@@ -70,8 +72,7 @@ fun printFoo(c: C) {
 printFoo(D())
 ```
 
-This example will print "c", because the extension function being called depends only on the declared type of the
-parameter `c`, which is the `C` class.
+위의 예제는 "c"를 print할 것입니다. extension 함수가 `C`클래스이고 생성산 매개변수 `c`의 선언된 유형에만 종속되기 때문에 `c`를 print하게 되는 것입니다.
 
 If a class has a member function, and an extension function is defined which has the same receiver type, the same name
 and is applicable to given arguments, the **member always wins**.
