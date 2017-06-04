@@ -281,9 +281,7 @@ fun main(args: Array<String>) {
 
 ### - Underscores in numeric literals
 
-Java8에서 처럼 , kotlin에서도 numeric literals의 언더스코어 
-
-Just as in Java 8, Kotlin now allows to use underscores in numeric literals to separate groups of digits:
+Java8에서 처럼 , kotlin에서도 numeric literals에 언더스코어를 사용하여 숫자 그룹을 구분할 수 있습니다.:
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -302,12 +300,13 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-Read the [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/underscores-in-numeric-literals.md) for more details.
+자세한 사항은 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/underscores-in-numeric-literals.md) 에서 확인해주세요.
 
+### properties 의 짧은 구문 
 
-### Shorter syntax for properties
+### - Shorter syntax for properties
 
-For properties with the getter defined as an expression body, the property type can now be omitted:
+표현식의 바디에 정의되어 있는 getter메서드에 있는 속성의 경우에는, 속성 type을 생략가능합니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -325,10 +324,12 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-### Inline property accessors
+### 인라인의 속성 접근자 
 
-You can now mark property accessors with the `inline` modifier if the properties don't have a backing field.
-Such accessors are compiled in the same way as [inline functions](inline-functions.html).
+### - Inline property accessors
+
+이제 속성에 backing field가 없다면 `inline`으로 속성접근자를 표시하시면 됩니다.
+이러한 접근자는  [inline functions](inline-functions.html) (인라인 함수) 와 같은 방식으로 컴파일 됩니다..
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -346,15 +347,16 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-You can also mark the entire property as `inline` - then the modifier is applied to both accessors.
+전체 속성을 `inline` 으로 표시할 수도 있습니다. 그럼 modifier(수정자)가 두 접근자에 모두에 적용됩니다.
 
-Read the [documentation](inline-functions.html#inline-properties-since-11) and [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/inline-properties.md) for more details.
+자세한 내용은 [documentation](inline-functions.html#inline-properties-since-11) 와 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/inline-properties.md) 에서 확인하실 수 있습니다.
 
+### 로컬 delegated 속성 
 
-### Local delegated properties
+### -  Local delegated properties
 
-You can now use the [delegated property](delegated-properties.html) syntax with local variables.
-One possible use is defining a lazily evaluated local variable:
+로컬 변수와 함께  [delegated property](delegated-properties.html) 의 구문을 사용할 수 있습니다.
+한 가지 사용가능한 방법은 필요할 때 호출되서 사용할 수 있는 `lazily evaluated` 로컬 변수를 정의할 수 있습니다. 
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -380,14 +382,15 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-Read the [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/local-delegated-properties.md) for more details.
+자세한 사항은 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/local-delegated-properties.md) 에서 확인하세요.
 
+### delegated property의 바인딩 차단 
 
-### Interception of delegated property binding
+### - Interception of delegated property binding
 
-For [delegated properties](delegated-properties.html), it is now possible to intercept delegate to property binding using the
-`provideDelegate` operator.
-For example, if we want to check the property name before binding, we can write something like this:
+[delegated properties](delegated-properties.html)의 경우, 이제`provideDelegate` 연산자를 사용하여 속성 바인딩에 대한 delegate(위임)를 가로챌 수 있습니다.
+
+예를들어, 바인딩하기전에 속성의 이름을 체크하려면 아래의 예제와 같이 작성할 수 있습니다.
 
 ``` kotlin
 class ResourceLoader<T>(id: ResourceID<T>) {
@@ -407,15 +410,14 @@ class MyUI {
 }
 ```
 
-The `provideDelegate` method will be called for each property during the creation of a `MyUI` instance, and it can perform
-the necessary validation right away.
+ `provideDelegate` 메서드는 `MyUI` 인스턴스를 생성하는 동안 각 속성에 대해 호출되며 필요한 검증을 바로 수행 할 수 있습니다.
 
-Read the [documentation](delegated-properties.html#providing-a-delegate-since-11) for more details.
+자세한 정보는 [documentation](delegated-properties.html#providing-a-delegate-since-11) 에서 확인하세요.
 
 
 ### Generic enum value access
 
-It is now possible to enumerate the values of an enum class in a generic way.
+이제 enum class의 값을 일반적인 방법으로 열거할 수 있습니다.
 
 <div class="sample" markdown="1" data-min-compiler-version="1.1">
 
@@ -434,10 +436,13 @@ fun main(args: Array<String>) {
 ```
 </div>
 
-### Scope control for implicit receivers in DSLs
+### DSL에서 암시적 리시버의 범위제어
 
-The [`@DslMarker`](/api/latest/jvm/stdlib/kotlin/-dsl-marker/index.html) annotation allows to restrict the use of receivers from outer scopes in a DSL context.
-Consider the canonical [HTML builder example](type-safe-builders.html):
+### - Scope control for implicit receivers in DSLs
+
+[`@DslMarker`](/api/latest/jvm/stdlib/kotlin/-dsl-marker/index.html) annotation(어노테이션)은 DSL 컨텍스트에서 외부 스코프의 리시버의 사용을 제한할 수 있습니다.
+
+정식 [HTML builder example](type-safe-builders.html) 예제를 확인해보세요.:
 
 ``` kotlin
 table {
@@ -447,18 +452,15 @@ table {
 }
 ```
 
-In Kotlin 1.0, code in the lambda passed to `td` has access to three implicit receivers: the one passed to `table`, to `tr`
-and to `td`. This allows you to call methods that make no sense in the context - for example to call `tr` inside `td` and thus
-to put a `<tr>` tag in a `<td>`.
+kotlin 1.0에서는, `td` 에 전달된 lamda코드는 세 개의 암묵적인 리시버에 대한 접근(액세스)권한을 가집니다. : (`tr` 및 `td` , `table`로 전달된 리시버) . 이렇게하면 컨텍스트에서 의미가 없는 메서드를 호출할 수 있습니다. 예를 들어` td`에서` tr`을 호출하여 <tr> 태그를  <td>에 넣을 수 있습니다.
 
-In Kotlin 1.1, you can restrict that, so that only methods defined on the implicit receiver of `td`
-will be available inside the lambda passed to `td`. You do that by defining your annotation marked with the `@DslMarker` meta-annotation
-and applying it to the base class of the tag classes.
+Kotlin 1.1 에서는 이를 제한 할 수 있으므로 `td`의 암시적인 리시버에 정의 된 메서드만  `td`에 전달 된 lamda 내부에서 사용할 수 있습니다. @DslMarker 메타 주석으로 표시된 주석을 정의하고이를 태그 클래스의 기본 클래스에 적용하면됩니다.
 
-Read the [documentation](type-safe-builders.html#scope-control-dslmarker-since-11) and [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/scope-control-for-implicit-receivers.md) for more details.
+자세한 내용은 [documentation](type-safe-builders.html#scope-control-dslmarker-since-11) 와 [KEEP](https://github.com/Kotlin/KEEP/blob/master/proposals/scope-control-for-implicit-receivers.md) 에서 보실 수 있습니다.
 
+### `rem` 연산자 
 
-### `rem` operator
+### - `rem` operator
 
 The `mod` operator is now deprecated, and `rem` is used instead. See [this issue](https://youtrack.jetbrains.com/issue/KT-14650) for motivation.
 
