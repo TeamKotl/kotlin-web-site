@@ -46,7 +46,7 @@ fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
 
  [Generic functions](generics.html) 를 참고 하시면 됩니다 .
 
-## Extensions는 정적으로 해결 Extensions are resolved **statically**
+## Extensions의 정적으로 해결 Extensions are resolved **statically**
 
 Extensions는 실제로 확장된 class를 수정하지않습니다. extension을 정의하게 되면, 클래스에 새로운 member를  insert 하지 않고, 이 유형의 변수에 점 표기법으로 호출 할 수있는 새로운 함수를 만들뿐입니다. 
 
@@ -72,11 +72,10 @@ fun printFoo(c: C) {
 printFoo(D())
 ```
 
-위의 예제는 "c"를 print할 것입니다. extension 함수가 `C`클래스이고 생성산 매개변수 `c`의 선언된 유형에만 종속되기 때문에 `c`를 print하게 되는 것입니다.
+위의 예제는 "c"를 결과로 print할 것입니다. extension 함수가 `C`클래스이고 생성한 매개변수 `c`의 선언된 유형에만 종속되기 때문에 `c`를 print하게 되는 것입니다.
 
-If a class has a member function, and an extension function is defined which has the same receiver type, the same name
-and is applicable to given arguments, the **member always wins**.
-For example:
+클래스에 멤버 함수가 있고, 같은 receiver type과  같은 이름 및 주어진 인수에 적용할 수 있는 extension 함수가 정의 되어 있다면 **"member"는 항상 우선으로 출력됩니다.**
+아래 예제를 보세요:
 
 ``` kotlin
 class C {
@@ -86,9 +85,9 @@ class C {
 fun C.foo() { println("extension") }
 ```
 
-If we call `c.foo()` of any `c` of type `C`, it will print "member", not "extension".
+`C` type의 `c`중 `c.foo()` 을 호출하면, "extension"이 아니라 "member"가 출력될 것입니다.
 
-However, it's perfectly OK for extension functions to overload member functions which have the same name but a different signature:
+그러나 , 같은 이름을 가지지만 signature가 다른  extension 함수를 오버로드(overload) 하는것은 온전히 괜찮으니 걱정하지 마세요.
 
 ``` kotlin
 class C {
@@ -98,41 +97,40 @@ class C {
 fun C.foo(i: Int) { println("extension") }
 ```
 
-The call to `C().foo(1)` will print "extension".
+ `C().foo(1)`을 호출하면  "extension"이 호출됩니다 .
 
 
 ## Nullable Receiver
 
-Note that extensions can be defined with a nullable receiver type. Such extensions can be called on an object variable
-even if its value is null, and can check for `this == null` inside the body. This is what allows you
-to call toString() in Kotlin without checking for null: the check happens inside the extension function.
+kotlin의 extension은 nullable receiver type으로 정의 될 수 있습니다. 이러한 extension은 값이 null인 경우에도 object(객체) 변수에서 호출할 수 있으며, 본문 코드 안에서  `this == null` 을 확인할 수 있습니다.
+Kotlin에서는  여러분인 null체크를 하지않고 toString()을 호출할 수 있다는것 을 알 수 있습니다. (null 체크는 extension 함수에서 발생합니다. `Any?.toString()`)
+
+아래 예제에서 확인하실 수 있습니다.
 
 ``` kotlin
 fun Any?.toString(): String {
     if (this == null) return "null"
-    // after the null check, 'this' is autocast to a non-null type, so the toString() below
-    // resolves to the member function of the Any class
+    // null체크 뒤에, 'this'는 non-null type으로 auto캐스팅됩니다. 그리고 toString() 아래 
+    // Any 클래스의 멤버 함수를 확인합니다.
     return toString()
 }
 ```
 
 ## Extension Properties
 
-Similarly to functions, Kotlin supports extension properties:
+kotlin에서는 extension함수와 마찬가지로 extension properties를 제공합니다.
 
 ``` kotlin
 val <T> List<T>.lastIndex: Int
     get() = size - 1
 ```
 
-Note that, since extensions do not actually insert members into classes, there's no efficient way for an extension 
-property to have a [backing field](properties.html#backing-fields). This is why **initializers are not allowed for 
-extension properties**. Their behavior can only be defined by explicitly providing getters/setters.
+유의사항으로는 extension은 실제로 클래스에 insert되지 않기 때문에, extension property이  [backing field](properties.html#backing-fields) 가지는 효율적인 방법이 없다는것을 주의하셔야 합니다. 이것이 **extension properties가 초기화를(initalisers) 허락하지 않는 **이유입니다.  extension property 의 동작은 getters / setter를 명시 적으로 제공함으로써 정의 할 수 있습니다. 
 
-Example:
+아래 예시를 보시면 됩니다.
 
 ``` kotlin
-val Foo.bar = 1 // error: initializers are not allowed for extension properties
+val Foo.bar = 1 // error: extension property에는 초기화가 허용되지 않습니다.
 ```
 
 
@@ -285,4 +283,4 @@ This is a little better, but we have no or little help from the powerful code co
 list.swap(list.binarySearch(otherList.max()), list.max())
 ```
 
-But we don't want to implement all the possible methods inside the class `List`, right? This is where extensions help us.
+
