@@ -134,14 +134,13 @@ val Foo.bar = 1 // error: extension property에는 초기화가 허용되지 않
 ```
 
 
-## Companion Object Extensions
+## Companion 객체의 Extensions
 
-If a class has a [companion object](object-declarations.html#companion-objects) defined, you can also define extension
-functions and properties for the companion object:
+클래스에 [companion object](object-declarations.html#companion-objects)가 정의 되어 있다면, companion 객체에 extension functions 와 extension properties를  정의할 수 있습니다.
 
 ``` kotlin
 class MyClass {
-    companion object { }  // will be called "Companion"
+    companion object { }  // "Companion"이 호출됩니다.
 }
 
 fun MyClass.Companion.foo() {
@@ -149,7 +148,7 @@ fun MyClass.Companion.foo() {
 }
 ```
 
-Just like regular members of the companion object, they can be called using only the class name as the qualifier:
+companion 객체는 일반 멤버와 마찬가지로, 클래스의 이름만 수식어구(한정어)로 사용하여 호출할 수 있습니다.
 
 ``` kotlin
 MyClass.foo()
