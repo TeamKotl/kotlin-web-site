@@ -155,17 +155,16 @@ MyClass.foo()
 ```
 
 
-## Scope of Extensions
+## Extensions의 범위 Scope of Extensions
 
-Most of the time we define extensions on the top level, i.e. directly under packages:
+대부분의 extensions는 최상위 레벨, 즉 package바로 아래 정의합니다.
 
 ``` kotlin
 package foo.bar
- 
 fun Baz.goo() { ... } 
 ```
 
-To use such an extension outside its declaring package, we need to import it at the call site:
+extension을 package밖에서 사용하고 싶다면,   해당 extension이 있는 곳을 import해야합니다.
 
 ``` kotlin
 package com.example.usage
@@ -177,16 +176,13 @@ import foo.bar.*   // importing everything from "foo.bar"
 fun usage(baz: Baz) {
     baz.goo()
 )
-
 ```
 
-See [Imports](packages.html#imports) for more information.
+자세한 정보는  [Imports](packages.html#imports) 에서 확인할 수 있습니다.
 
-## Declaring Extensions as Members
+## Extensions의 멤버 선언 Declaring Extensions as Members
 
-Inside a class, you can declare extensions for another class. Inside such an extension, there are multiple _implicit receivers_ -
-objects members of which can be accessed without a qualifier. The instance of the class in which the extension is declared is called
-_dispatch receiver_, and the instance of the receiver type of the extension method is called _extension receiver_.
+클래스 안에서 다른 클래스의 extensioin을 선언할 수 있습니다.  이러한 extension에는 암시적인 receivers가 있는데, 이 receiver는 한정자없이 엑세스 할 수 있습니다.  extension이 선언 되어 있는  클래스의 인스턴스를  _dispatch receiver_ 라고 하고, extension method의 receiver 타입 인스턴스를 _extension receiver_ 라고 합니다.
 
 ``` kotlin
 class D {
@@ -207,8 +203,7 @@ class C {
 }
 ```
 
-In case of a name conflict between the members of the dispatch receiver and the extension receiver, the extension receiver takes
-precedence. To refer to the member of the dispatch receiver you can use the [qualified `this` syntax](this-expressions.html#qualified).
+위의 예제는 이름으로 인한 충돌이 발생합니다. 이렇게  dispatch receiver 와 the extension receiver가 이름 충돌이 발생하면 ,  extension receiver가 우선합니다. dispatch receiver의 멤버를 참조하려면  [qualified `this` syntax](this-expressions.html#qualified) 문서를 참조하시면 됩니다.
 
 ``` kotlin
 class C {
@@ -218,8 +213,7 @@ class C {
     }
 ```
 
-Extensions declared as members can be declared as `open` and overridden in subclasses. This means that the dispatch of such
-functions is virtual with regard to the dispatch receiver type, but static with regard to the extension receiver type.
+멤버로 선언된 Extensions은  `open`으로 선언 될 수도 있고 서브 클래스에서 override 될 수도 있습니다. 이러한 기능의 dispatch 의미는 dispatch receiver type과 관련하여 가상이지만 extension receiver type에 관하여 static합니다.(here)
 
 ``` kotlin
 open class D {
@@ -260,22 +254,23 @@ C().caller(D1())  // prints "D.foo in C" - extension receiver is resolved static
 
 ## Motivation
 
-In Java, we are used to classes named "\*Utils": `FileUtils`, `StringUtils` and so on. The famous `java.util.Collections` belongs to the same breed.
-And the unpleasant part about these Utils-classes is that the code that uses them looks like this:
+여러분이 알고 계시는  Java에서는 "\*Utils" 클래스가 익숙하실 겁니다. `FileUtils`, `StringUtils` 등등과 같이 말이죠. 가장 잘 알려진  `java.util.Collections` 와 같은 클래스들 입니다. ( always getting in the way - 방해되다 )
+
+자주 사용하지만 Utils-classes를 사용하면서 불편한 점은 아래 코드를 보시면 바로 아실 수 있을 겁니다.
 
 ``` java
-// Java
+// Java에서 사용되는 예입니다
 Collections.swap(list, Collections.binarySearch(list, Collections.max(otherList)), Collections.max(list))
 ```
 
-Those class names are always getting in the way. We can use static imports and get this:
+그 클래스 이름들은 항상 코드를 쓰는데 항상 방해 받고 있습니다. 여러분은 이제 static import를 사용하여 다음과 같이 사용할 수 있습니다.
 
 ``` java
 // Java
 swap(list, binarySearch(list, max(otherList)), max(list))
 ```
 
-This is a little better, but we have no or little help from the powerful code completion of the IDE. It would be so much better if we could say
+위의 방법으로도 훨씬 나아진것 일 수 있지만,  IDE의 강력한 코드 작성으로 인한 도움은 거의없거나 전혀 없습니다. 위와 같은 방법으로 한다면 훨씬 더 나아질 것입니다. (It would be so much better if we could say)ㄴ
 
 ``` java
 // Java
