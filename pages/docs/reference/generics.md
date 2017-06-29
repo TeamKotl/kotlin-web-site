@@ -7,32 +7,31 @@ title: "Generics"
 
 # Generics
 
-As in Java, classes in Kotlin may have type parameters:
+java에서 처럼,  Kotlin의 클래스에는 type파라메터를 가질 수 있습니다.
 
-``` kotlin
+```kotlin
 class Box<T>(t: T) {
     var value = t
 }
 ```
 
-In general, to create an instance of such a class, we need to provide the type arguments:
+일반적으로, 이러한 클래스의 인스턴스를 만들기 위해서는 type 인수를 제공해야 합니다.
 
-``` kotlin
+```kotlin
 val box: Box<Int> = Box<Int>(1)
 ```
 
-But if the parameters may be inferred, e.g. from the constructor arguments or by some other means, one is allowed to omit the type arguments:
+그러나 매개변수가 추론될 수 있다면, 예를들어 생성자의 인수 또는 다른 방법으로  type 인수를 생략할 수 있습니다.
 
-``` kotlin
-val box = Box(1) // 1 has type Int, so the compiler figures out that we are talking about Box<Int>
+```kotlin
+val box = Box(1) // 1 Int type 이므로, 컴파일러는 우리가 Box<Int>에 대해 말하고 있다고 이해합니다.
 ```
 
-## Variance
+## 변화 Variance
 
-One of the most tricky parts of Java's type system is wildcard types (see [Java Generics FAQ](http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html)).
-And Kotlin doesn't have any. Instead, it has two other things: declaration-site variance and type projections.
+Java타입의 시스템에서 가장 하기 까다로운 것중 하나는 wildcard type입니다. ( [Java Generics FAQ](http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html) 문서를 참고하세요).    그렇지만  Kotlin에는 아무것도 없습니다. 대신 `declaration-site variance` 그리고 `type projections(타입 추론)` 두가지 다른것이 있습니다. 
 
-First, let's think about why Java needs those mysterious wildcards. The problem is explained in [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html), Item 28: *Use bounded wildcards to increase API flexibility*.
+먼저, First, let's think about why Java needs those mysterious wildcards. The problem is explained in [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html), Item 28: *Use bounded wildcards to increase API flexibility*.
 First, generic types in Java are **invariant**, meaning that `List<String>` is **not** a subtype of `List<Object>`. 
 Why so? If List was not **invariant**, it would have been no 
 better than Java's arrays, since the following code would have compiled and caused an exception at runtime:
@@ -85,7 +84,7 @@ In "clever words", the wildcard with an **extends**\-bound (**upper** bound) mak
 The key to understanding why this trick works is rather simple: if you can only **take** items from a collection, then using a collection of `String`s
 and reading `Object`s from it is fine. Conversely, if you can only _put_ items into the collection, it's OK to take a collection of
 `Object`s and put `String`s into it: in Java we have `List<? super String>` a **supertype** of `List<Object>`.
- 
+
 The latter is called **contravariance**, and you can only call methods that take String as an argument on `List<? super String>` 
 (e.g., you can call `add(String)` or `set(int, String)`), while 
 if you call something that returns `T` in `List<T>`, you don't get a `String`, but an `Object`.
@@ -229,16 +228,16 @@ The safe way here is to define such a projection of the generic type, that every
 
 Kotlin provides so called **star-projection** syntax for this:
 
- - For `Foo<out T>`, where `T` is a covariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>`. It means that when the `T` is unknown you can safely *read* values of `TUpper` from `Foo<*>`.
- - For `Foo<in T>`, where `T` is a contravariant type parameter, `Foo<*>` is equivalent to `Foo<in Nothing>`. It means there is nothing you can *write* to `Foo<*>` in a safe way when `T` is unknown.
- - For `Foo<T>`, where `T` is an invariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>` for reading values and to `Foo<in Nothing>` for writing values.
+- For `Foo<out T>`, where `T` is a covariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>`. It means that when the `T` is unknown you can safely *read* values of `TUpper` from `Foo<*>`.
+- For `Foo<in T>`, where `T` is a contravariant type parameter, `Foo<*>` is equivalent to `Foo<in Nothing>`. It means there is nothing you can *write* to `Foo<*>` in a safe way when `T` is unknown.
+- For `Foo<T>`, where `T` is an invariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>` for reading values and to `Foo<in Nothing>` for writing values.
 
 If a generic type has several type parameters each of them can be projected independently.
 For example, if the type is declared as `interface Function<in T, out U>` we can imagine the following star-projections:
 
- - `Function<*, String>` means `Function<in Nothing, String>`;
- - `Function<Int, *>` means `Function<Int, out Any?>`;
- - `Function<*, *>` means `Function<in Nothing, out Any?>`.
+- `Function<*, String>` means `Function<in Nothing, String>`;
+- `Function<Int, *>` means `Function<Int, out Any?>`;
+- `Function<*, *>` means `Function<in Nothing, out Any?>`.
 
 *Note*: star-projections are very much like Java's raw types, but safe.
 
