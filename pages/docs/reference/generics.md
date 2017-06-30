@@ -37,11 +37,6 @@ Java타입의 시스템에서 가장 하기 까다로운 것중 하나는 wildca
 
 왜 그럴까요? List가 불변 적이 지 않으면 다음 코드가 컴파일되어 런타임에 예외가 발생 했으므로 Java의 배열보다 좋을 수 없습니다.
 
-First, let's think about why Java needs those mysterious wildcards. The problem is explained in [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html), Item 28: *Use bounded wildcards to increase API flexibility*.
-First, generic types in Java are **invariant**, meaning that `List<String>` is **not** a subtype of `List<Object>`. 
-Why so? If List was not **invariant**, it would have been no 
-better than Java's arrays, since the following code would have compiled and caused an exception at runtime:
-
 ``` java
 // Java
 List<String> strs = new ArrayList<String>();
