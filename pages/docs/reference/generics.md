@@ -75,9 +75,7 @@ interface Collection<E> ... {
 }
 ```
 
-**wildcard type 의 인수** `? extends E` 는  indicates that this method accepts a collection of objects of *some subtype of* `E`, not `E` itself. 
-This means that we can safely **read** `E`'s from items (elements of this collection are instances of a subclass of E), but **cannot write** to 
-it since we do not know what objects comply to that unknown subtype of `E`. 
+**wildcard type 의 인수** `? extends E` 는 이메소드 자체가 `E` 자체는 아니고 `E`의 subtype의 오브젝트 컬렉션을 받아들이는 것을 나타냅니다. 그것은 여러분이 항목의 `E`를 안전하게  **read**할 수 있다는 것을 의미합니다.(이 컬렉션의 요소는 `E`의 서브클래스의 인스턴스입니다.) , 하지만 알수 없는 `E`의 subtype을 준수하는 object가 무엇인지 알 수 없기때문에 항목에 **쓸 수 없습니다.** 
 In return for this limitation, we have the desired behaviour: `Collection<String>` *is* a subtype of `Collection<? extends Object>`. 
 In "clever words", the wildcard with an **extends**\-bound (**upper** bound) makes the type **covariant**.
 
