@@ -31,21 +31,20 @@ val box = Box(1) // 1 Int type 이므로, 컴파일러는 우리가 Box<Int>에 
 
 Java타입의 시스템에서 가장 하기 까다로운 것중 하나는 wildcard type입니다. ( [Java Generics FAQ](http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html) 문서를 참고하세요).    그렇지만  Kotlin에는 아무것도 없습니다. 대신 `declaration-site variance` 그리고 `type projections(타입 추론)` 두가지 다른것이 있습니다. 
 
-먼저, 자바가 왜 그와 같은 이해하기 어려운 와일드 카드를 필요로하는지 생각해 봅시다. 이 문제는  [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html)에서 설명합니다. Item 28 : 바운드 와일드 카드를 사용하여 API 유연성 향상
+먼저, 자바가 왜 그와 같은 이해하기 어려운 와일드 카드를 필요로하는지 생각해 봅시다. 이 문제는  [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html)에서 설명합니다. ( Item 28 : 바운드 와일드 카드를 사용하여 API 유연성 향상 )
 
-우선, Java의 범용 형은 불변입니다. 즉, List <String>는 List <Object>의 subtype이 아닙니다.
+우선, Java의 generic type은 불변, 변하지 않습니다. 즉, List <String>는 List <Object>의 subtype이 아닙니다.
 
-왜 그럴까요? List가 불변 적이 지 않으면 다음 코드가 컴파일되어 런타임에 예외가 발생 했으므로 Java의 배열보다 좋을 수 없습니다.
+왜 그럴까요? List가 불변 적이 지 않으면 다음 코드가 컴파일되어 런타임에 예외가 발생 하므로  Java의 배열보다 좋을 수 없습니다.
 
 ``` java
 // Java
 List<String> strs = new ArrayList<String>();
-List<Object> objs = strs; // !!! The cause of the upcoming problem sits here. Java prohibits this!
-objs.add(1); // Here we put an Integer into a list of Strings
-String s = strs.get(0); // !!! ClassCastException: Cannot cast Integer to String
+List<Object> objs = strs; // !!!다가올 문제의 원인은 여기에 있습니다. java는 이를 금지합니다.
+objs.add(1); // 여기에 Integer를 문자열 목록에 넣습니다.
+String s = strs.get(0); // !!! ClassCastException: integer를 string으로 캐스팅할 수 없습니다.
 ```
-So, Java prohibits such things in order to guarantee run-time safety. But this has some implications. For example, consider the `addAll()` method from `Collection` 
-interface. What's the signature of this method? Intuitively, we'd put it this way:
+그래서,  Java는 런타임 안전을 보장하기 위해 이러한 일을 금지합니다. 하지만 이는 몇가지 함축적인 의미를 가지고 있습니다. 예를들어,  `Collection` 인터페이스의  `addAll()` 메서드를 생각해보죠.  이 메서드의 signature는 무엇일까요? 직관적으로 저희는 다음과 같이 표현하였습니다.
 
 ``` java
 // Java
@@ -54,20 +53,20 @@ interface Collection<E> ... {
 }
 ```
 
-But then, we would not be able to do the following simple thing (which is perfectly safe):
+그렇지만, 우리는 그렇게 다음과 같은 간단한 일을 할 수 없을 것입니다. (이것은 아주 안전합니다.):
 
 ``` java
 // Java
 void copyAll(Collection<Object> to, Collection<String> from) {
-  to.addAll(from); // !!! Would not compile with the naive declaration of addAll:
-                   //       Collection<String> is not a subtype of Collection<Object>
+  to.addAll(from); // !!!addAll의 순수 선언으로 컴파일 되지 않습니다.
+                   // Collection<String>은  Collection<Object>의 subType이 아닙니다.
 }
 ```
 
-(In Java, we learned this lesson the hard way, see [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html), Item 25: *Prefer lists to arrays*)
+(Java에서는 이러한 교훈을 어려운 방식으로 배웠습니다. [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html) 에있는 ` Item 25`: *Prefer lists to arrays* 를 참고하세요. ) 
 
 
-That's why the actual signature of `addAll()` is the following:
+이것이 실제 `addAll()`의 실제 signature와 다음과 같은 이유입니다.
 
 ``` java
 // Java
@@ -76,9 +75,7 @@ interface Collection<E> ... {
 }
 ```
 
-The **wildcard type argument** `? extends E` indicates that this method accepts a collection of objects of *some subtype of* `E`, not `E` itself. 
-This means that we can safely **read** `E`'s from items (elements of this collection are instances of a subclass of E), but **cannot write** to 
-it since we do not know what objects comply to that unknown subtype of `E`. 
+**wildcard type 의 인수** `? extends E` 는 이메소드 자체가 `E` 자체는 아니고 `E`의 subtype의 오브젝트 컬렉션을 받아들이는 것을 나타냅니다. 그것은 여러분이 항목의 `E`를 안전하게  **read**할 수 있다는 것을 의미합니다.(이 컬렉션의 요소는 `E`의 서브클래스의 인스턴스입니다.) , 하지만 알수 없는 `E`의 subtype을 준수하는 object가 무엇인지 알 수 없기때문에 항목에 **쓸 수 없습니다.** 
 In return for this limitation, we have the desired behaviour: `Collection<String>` *is* a subtype of `Collection<? extends Object>`. 
 In "clever words", the wildcard with an **extends**\-bound (**upper** bound) makes the type **covariant**.
 
