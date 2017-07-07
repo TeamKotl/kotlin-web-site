@@ -78,8 +78,7 @@ interface Collection<E> ... {
 **wildcard type 의 인수** `? extends E` 는 이메소드 자체가 `E` 자체는 아니고 `E`의 subtype의 오브젝트 컬렉션을 받아들이는 것을 나타냅니다. 그것은 여러분이 항목의 `E`를 안전하게  **read**할 수 있다는 것을 의미합니다.(이 컬렉션의 요소는 `E`의 서브클래스의 인스턴스입니다.) , 하지만 알수 없는 `E`의 subtype을 준수하는 object가 무엇인지 알 수 없기때문에 항목에 **쓸 수 없습니다.** 
 이 제한에 대한 대가로 우리는 원하는 행동을 취합니다. `Collection<String>` 은 `Collection<? extends Object>`의  subtype입니다.
 
-In return for this limitation, we have the desired behaviour: `Collection<String>` *is* a subtype of `Collection<? extends Object>`. 
-In "clever words", the wildcard with an **extends**\-bound (**upper** bound) makes the type **covariant**.
+"clever words"에서 **extends**\-bound (**upper** bound)를 가진 와일드카드는 type을 `함께 변하도록 합니다.`
 
 The key to understanding why this trick works is rather simple: if you can only **take** items from a collection, then using a collection of `String`s
 and reading `Object`s from it is fine. Conversely, if you can only _put_ items into the collection, it's OK to take a collection of
