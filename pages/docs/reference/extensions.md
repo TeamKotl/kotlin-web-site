@@ -155,9 +155,9 @@ MyClass.foo()
 ```
 
 
-## Scope of Extensions
+## Extensions 의 scope
 
-Most of the time we define extensions on the top level, i.e. directly under packages:
+대부분의 경우 extensions 의 정의는 최상위의  즉, 패키지의 바로 아래 부분에 정의 합니다.
 
 ``` kotlin
 package foo.bar
@@ -165,7 +165,7 @@ package foo.bar
 fun Baz.goo() { ... } 
 ```
 
-To use such an extension outside its declaring package, we need to import it at the call site:
+이러한 extension을 선언된 패키지 외부에서 사용하기 위해서는 site를 호출하여 해당 extension을 import하는 것이 필요합니다.
 
 ``` kotlin
 package com.example.usage
@@ -177,16 +177,15 @@ import foo.bar.*   // importing everything from "foo.bar"
 fun usage(baz: Baz) {
     baz.goo()
 )
-
 ```
 
-See [Imports](packages.html#imports) for more information.
+[Imports](packages.html#imports) 에 대한 자세한 정보도 확인하실 수 있습니다.
 
-## Declaring Extensions as Members
+## Extensions 을 Members 로 선언 
 
-Inside a class, you can declare extensions for another class. Inside such an extension, there are multiple _implicit receivers_ -
-objects members of which can be accessed without a qualifier. The instance of the class in which the extension is declared is called
-_dispatch receiver_, and the instance of the receiver type of the extension method is called _extension receiver_.
+클래스안에서, 다른 클래스의 extensions을 선언할 수 있습니다.  이러한 extension 은 여러개의 암시적인 receiver를 가집니다. 암시적인 receiver는 한정자없이 엑세스(접근)가능합니다.
+
+extension이 선언된 클래스이 인스턴스를 _dispatch receiver_ 라고 하며,  extension Method의 receiver type의 인스턴스를 _extension receiver_ 라고 합니다.
 
 ``` kotlin
 class D {
