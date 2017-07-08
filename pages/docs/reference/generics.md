@@ -7,45 +7,44 @@ title: "Generics"
 
 # Generics
 
-As in Java, classes in Kotlin may have type parameters:
+java에서 처럼,  Kotlin의 클래스에는 type파라메터를 가질 수 있습니다.
 
-``` kotlin
+```kotlin
 class Box<T>(t: T) {
     var value = t
 }
 ```
 
-In general, to create an instance of such a class, we need to provide the type arguments:
+일반적으로, 이러한 클래스의 인스턴스를 만들기 위해서는 type 인수를 제공해야 합니다.
 
-``` kotlin
+```kotlin
 val box: Box<Int> = Box<Int>(1)
 ```
 
-But if the parameters may be inferred, e.g. from the constructor arguments or by some other means, one is allowed to omit the type arguments:
+그러나 매개변수가 추론될 수 있다면, 예를들어 생성자의 인수 또는 다른 방법으로  type 인수를 생략할 수 있습니다.
 
-``` kotlin
-val box = Box(1) // 1 has type Int, so the compiler figures out that we are talking about Box<Int>
+```kotlin
+val box = Box(1) // 1 Int type 이므로, 컴파일러는 우리가 Box<Int>에 대해 말하고 있다고 이해합니다.
 ```
 
-## Variance
+## 변화 Variance
 
-One of the most tricky parts of Java's type system is wildcard types (see [Java Generics FAQ](http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html)).
-And Kotlin doesn't have any. Instead, it has two other things: declaration-site variance and type projections.
+Java타입의 시스템에서 가장 하기 까다로운 것중 하나는 wildcard type입니다. ( [Java Generics FAQ](http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html) 문서를 참고하세요).    그렇지만  Kotlin에는 아무것도 없습니다. 대신 `declaration-site variance` 그리고 `type projections(타입 추론)` 두가지 다른것이 있습니다. 
 
-First, let's think about why Java needs those mysterious wildcards. The problem is explained in [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html), Item 28: *Use bounded wildcards to increase API flexibility*.
-First, generic types in Java are **invariant**, meaning that `List<String>` is **not** a subtype of `List<Object>`. 
-Why so? If List was not **invariant**, it would have been no 
-better than Java's arrays, since the following code would have compiled and caused an exception at runtime:
+먼저, 자바가 왜 그와 같은 이해하기 어려운 와일드 카드를 필요로하는지 생각해 봅시다. 이 문제는  [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html)에서 설명합니다. ( Item 28 : 바운드 와일드 카드를 사용하여 API 유연성 향상 )
+
+우선, Java의 generic type은 불변, 변하지 않습니다. 즉, List <String>는 List <Object>의 subtype이 아닙니다.
+
+왜 그럴까요? List가 불변 적이 지 않으면 다음 코드가 컴파일되어 런타임에 예외가 발생 하므로  Java의 배열보다 좋을 수 없습니다.
 
 ``` java
 // Java
 List<String> strs = new ArrayList<String>();
-List<Object> objs = strs; // !!! The cause of the upcoming problem sits here. Java prohibits this!
-objs.add(1); // Here we put an Integer into a list of Strings
-String s = strs.get(0); // !!! ClassCastException: Cannot cast Integer to String
+List<Object> objs = strs; // !!!다가올 문제의 원인은 여기에 있습니다. java는 이를 금지합니다.
+objs.add(1); // 여기에 Integer를 문자열 목록에 넣습니다.
+String s = strs.get(0); // !!! ClassCastException: integer를 string으로 캐스팅할 수 없습니다.
 ```
-So, Java prohibits such things in order to guarantee run-time safety. But this has some implications. For example, consider the `addAll()` method from `Collection` 
-interface. What's the signature of this method? Intuitively, we'd put it this way:
+그래서,  Java는 런타임 안전을 보장하기 위해 이러한 일을 금지합니다. 하지만 이는 몇가지 함축적인 의미를 가지고 있습니다. 예를들어,  `Collection` 인터페이스의  `addAll()` 메서드를 생각해보죠.  이 메서드의 signature는 무엇일까요? 직관적으로 저희는 다음과 같이 표현하였습니다.
 
 ``` java
 // Java
@@ -54,20 +53,20 @@ interface Collection<E> ... {
 }
 ```
 
-But then, we would not be able to do the following simple thing (which is perfectly safe):
+그렇지만, 우리는 그렇게 다음과 같은 간단한 일을 할 수 없을 것입니다. (이것은 아주 안전합니다.):
 
 ``` java
 // Java
 void copyAll(Collection<Object> to, Collection<String> from) {
-  to.addAll(from); // !!! Would not compile with the naive declaration of addAll:
-                   //       Collection<String> is not a subtype of Collection<Object>
+  to.addAll(from); // !!!addAll의 순수 선언으로 컴파일 되지 않습니다.
+                   // Collection<String>은  Collection<Object>의 subType이 아닙니다.
 }
 ```
 
-(In Java, we learned this lesson the hard way, see [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html), Item 25: *Prefer lists to arrays*)
+(Java에서는 이러한 교훈을 어려운 방식으로 배웠습니다. [Effective Java](http://www.oracle.com/technetwork/java/effectivejava-136174.html) 에있는 ` Item 25`: *Prefer lists to arrays* 를 참고하세요. ) 
 
 
-That's why the actual signature of `addAll()` is the following:
+이것이 실제 `addAll()`의 실제 signature와 다음과 같은 이유입니다.
 
 ``` java
 // Java
@@ -76,16 +75,15 @@ interface Collection<E> ... {
 }
 ```
 
-The **wildcard type argument** `? extends E` indicates that this method accepts a collection of objects of *some subtype of* `E`, not `E` itself. 
-This means that we can safely **read** `E`'s from items (elements of this collection are instances of a subclass of E), but **cannot write** to 
-it since we do not know what objects comply to that unknown subtype of `E`. 
-In return for this limitation, we have the desired behaviour: `Collection<String>` *is* a subtype of `Collection<? extends Object>`. 
-In "clever words", the wildcard with an **extends**\-bound (**upper** bound) makes the type **covariant**.
+**wildcard type 의 인수** `? extends E` 는 이메소드 자체가 `E` 자체는 아니고 `E`의 subtype의 오브젝트 컬렉션을 받아들이는 것을 나타냅니다. 그것은 여러분이 항목의 `E`를 안전하게  **read**할 수 있다는 것을 의미합니다.(이 컬렉션의 요소는 `E`의 서브클래스의 인스턴스입니다.) , 하지만 알수 없는 `E`의 subtype을 준수하는 object가 무엇인지 알 수 없기때문에 항목에 **쓸 수 없습니다.** 
+이 제한에 대한 대가로 우리는 원하는 행동을 취합니다. `Collection<String>` 은 `Collection<? extends Object>`의  subtype입니다.
+
+"clever words"에서 **extends**\-bound (**upper** bound)를 가진 와일드카드는 type을 `함께 변하도록 합니다.`
 
 The key to understanding why this trick works is rather simple: if you can only **take** items from a collection, then using a collection of `String`s
 and reading `Object`s from it is fine. Conversely, if you can only _put_ items into the collection, it's OK to take a collection of
 `Object`s and put `String`s into it: in Java we have `List<? super String>` a **supertype** of `List<Object>`.
- 
+
 The latter is called **contravariance**, and you can only call methods that take String as an argument on `List<? super String>` 
 (e.g., you can call `add(String)` or `set(int, String)`), while 
 if you call something that returns `T` in `List<T>`, you don't get a `String`, but an `Object`.
@@ -229,16 +227,16 @@ The safe way here is to define such a projection of the generic type, that every
 
 Kotlin provides so called **star-projection** syntax for this:
 
- - For `Foo<out T>`, where `T` is a covariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>`. It means that when the `T` is unknown you can safely *read* values of `TUpper` from `Foo<*>`.
- - For `Foo<in T>`, where `T` is a contravariant type parameter, `Foo<*>` is equivalent to `Foo<in Nothing>`. It means there is nothing you can *write* to `Foo<*>` in a safe way when `T` is unknown.
- - For `Foo<T>`, where `T` is an invariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>` for reading values and to `Foo<in Nothing>` for writing values.
+- For `Foo<out T>`, where `T` is a covariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>`. It means that when the `T` is unknown you can safely *read* values of `TUpper` from `Foo<*>`.
+- For `Foo<in T>`, where `T` is a contravariant type parameter, `Foo<*>` is equivalent to `Foo<in Nothing>`. It means there is nothing you can *write* to `Foo<*>` in a safe way when `T` is unknown.
+- For `Foo<T>`, where `T` is an invariant type parameter with the upper bound `TUpper`, `Foo<*>` is equivalent to `Foo<out TUpper>` for reading values and to `Foo<in Nothing>` for writing values.
 
 If a generic type has several type parameters each of them can be projected independently.
 For example, if the type is declared as `interface Function<in T, out U>` we can imagine the following star-projections:
 
- - `Function<*, String>` means `Function<in Nothing, String>`;
- - `Function<Int, *>` means `Function<Int, out Any?>`;
- - `Function<*, *>` means `Function<in Nothing, out Any?>`.
+- `Function<*, String>` means `Function<in Nothing, String>`;
+- `Function<Int, *>` means `Function<Int, out Any?>`;
+- `Function<*, *>` means `Function<in Nothing, out Any?>`.
 
 *Note*: star-projections are very much like Java's raw types, but safe.
 
