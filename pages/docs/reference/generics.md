@@ -75,18 +75,14 @@ interface Collection<E> ... {
 }
 ```
 
-**wildcard type 의 인수** `? extends E` 는 이메소드 자체가 `E` 자체는 아니고 `E`의 subtype의 오브젝트 컬렉션을 받아들이는 것을 나타냅니다. 그것은 여러분이 항목의 `E`를 안전하게  **read**할 수 있다는 것을 의미합니다.(이 컬렉션의 요소는 `E`의 서브클래스의 인스턴스입니다.) , 하지만 알수 없는 `E`의 subtype을 준수하는 object가 무엇인지 알 수 없기때문에 항목에 **쓸 수 없습니다.** 
+**wildcard type 의 인수** `? extends E` 는 이메소드 자체가 `E` 자체는 아니고 `E`의 subtype의 오브젝트 컬렉션을 받아들이는 것을 나타냅니다. 그것은 여러분이 항목의 `E`를 안전하게  **read**할 수 있다는 것을 의미합니다. (이 컬렉션의 요소는 `E`의 서브클래스의 인스턴스입니다.) , 하지만 알수 없는 `E`의 subtype을 준수하는 object가 무엇인지 알 수 없기때문에 항목에 **쓸 수 없습니다.** 
 이 제한에 대한 대가로 우리는 원하는 행동을 취합니다. `Collection<String>` 은 `Collection<? extends Object>`의  subtype입니다.
 
 "clever words"에서 **extends**\-bound (**upper** bound)를 가진 와일드카드는 type을 `함께 변하도록 합니다.`
 
-The key to understanding why this trick works is rather simple: if you can only **take** items from a collection, then using a collection of `String`s
-and reading `Object`s from it is fine. Conversely, if you can only _put_ items into the collection, it's OK to take a collection of
-`Object`s and put `String`s into it: in Java we have `List<? super String>` a **supertype** of `List<Object>`.
+이 트릭이 왜 작동 하는지 이해 할 수 있게 하는 열쇠는 아주 간단합니다. : 만약 컬렉션의 아이템들만 **가져올 수 있다면,** `문자열 (String)` 컬렉션을 사용고 `Object`를 읽는것이 더 좋습니다. 반대로 , 컬렉션에 아이템들을 넣을 수 있다면, `Object` 컬렉션을 가져오고 `String`을 넣어도 됩니다. : java에서는`List<Object>` 의  **supertype** 인  `List<? super String>` 를 가지고 있습니다.
 
-The latter is called **contravariance**, and you can only call methods that take String as an argument on `List<? super String>` 
-(e.g., you can call `add(String)` or `set(int, String)`), while 
-if you call something that returns `T` in `List<T>`, you don't get a `String`, but an `Object`.
+후자를 **contravariance** 라고 부르며, `String`을 인수로 가지는 메서드만  `List<? super String>`  (예 : `add(String)` 또는 `set(int, Stirng`) )을 호출할 수 있지만 , `List<T>`에서   `T` 를  반환하는 항목을 호출하면 `String`이 아니라 `Object`를 얻을 수 있습니다.
 
 Joshua Bloch calls those objects you only **read** from **Producers**, and those you only **write** to **Consumers**. He recommends: "*For maximum flexibility, use wildcard types on input parameters that represent producers or consumers*", and proposes the following mnemonic:
 
